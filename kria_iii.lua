@@ -546,6 +546,7 @@ if ro==o then gl(c,7,BF)
 elseif ro==o+1 and i~=3 and i~=7 then gl(c,7,blk and BF or D)
 else gl(c,7,F) end
 end
+gl(16,7,shphl and BF or D)
 for r=1,6 do
 if r~=sch then
 local idx=7-r
@@ -906,6 +907,7 @@ if z==1 then kvm=vm end
 if vm==6 and z==0 then
 if shk and shk[1]==y and shk[2]==x then shk=nil end
 if scph and scph[1]==y and scph[2]==x then scph=nil end
+if y==7 and x==16 then shphl=false rd() end
 return
 end
 if y==7 and x==7 and (vm==1 or vm==7 or mlh or mth or mph or cfh) then
@@ -1043,9 +1045,15 @@ end
 shk=nil bsc() rd()
 elseif x>=4 and x<=8 and y>=1 and y<=4 then
 sdir[y]=x-3 ddr[y]=1 rd()
+elseif y==7 and x==16 then
+shphl=true rd()
 elseif y==7 and x>=9 and x<=15 then
 local o=WK[x-8] local wk=48+o
+if shphl then
+if x~=11 and x~=15 then sr=(sr==wk+1) and wk or wk+1 else sr=wk end
+else
 if sr==wk and x~=11 and x~=15 then sr=wk+1 elseif sr==wk+1 then sr=wk else sr=wk end
+end
 bsc() rd()
 elseif x>=9 and x<=16 and y>=1 and y<=6 then
 local idx=7-y
@@ -1098,7 +1106,7 @@ mute={false,false,false,false}
 prb={} rdv={} rsl={}
 an2={} ve={} aph={} als={} ale={} adv2={} adc={} addr={}
 tclk={false,false,false,false} nph={1,1,1,1}
-blk=false blk2=false bct=0
+blk=false blk2=false bct=0 shphl=false
 for t=1,4 do
 tr[t]={} no[t]={} oc[t]={} du[t]={} prb[t]={} rdv[t]={} rsl[t]={}
 an2[t]={} ve[t]={}

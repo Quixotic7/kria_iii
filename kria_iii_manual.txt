@@ -124,6 +124,7 @@ SCALE PAGE — step 15
 
 - root note (row 7, steps 9-15)
 › steps 9-15 = white keys C through B. press once to select a natural root. press the same key again to sharpen it (C#, D#, F#, G# or A# - E and B have no sharp). a sharp root blinks. press again to return to natural.
+› step 16 (sharp shortcut): hold step 16 + press any root key to toggle sharp on/off immediately — useful when changing root live without double-tapping.
 › all notes across all tracks transpose to the new root immediately.
 
 - scale presets (rows 6-7, steps 1-8)
@@ -178,7 +179,8 @@ GESTURES
   clear page data for track                 hold track button ~2s
   toggle mute                               hold loop mod (step 11) + press track
   open sub-page (ratchet / alt note / vel)  press step 6, 7, or 8 again
-  set sharp root note                       press same root key twice - scale page
+  toggle sharp root note                    press same root key twice - scale page
+  sharp root shortcut                       hold step 16 + press root key - scale page
   stretch interval, compensate adjacent     hold scale (step 15) + press interval - scale page
   micro-adjust scale degree                 press same interval twice - scale page
   reset preset to factory                   hold scale (step 15) + press preset - scale page

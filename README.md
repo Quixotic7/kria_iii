@@ -32,6 +32,7 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - **idle animation** — buttons continue to blink and animate when transport is stopped, so the grid stays informative while editing
 - **velocity page** — per-step velocity control added as a second-press sub-page on the octave button (blinks when active)
 - **ui improvements** — cleaner visual feedback across pattern, navigation, and scale pages
+- **sharp root shortcut** — hold step 16 on the scale page + press any root key to toggle sharp immediately, without double-tapping. useful when changing root live
 
 ## requirements
 
