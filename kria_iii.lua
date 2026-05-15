@@ -15,7 +15,8 @@ ODR=5
 OR={[2]=36,[3]=24,[4]=12,[5]=0,[6]=-12,[7]=-24}
 GO={-24,-12,0,12,24,36,48,60}
 NP=16
-DM={1,.937,.875,.812,.75,.687,.625,.562,.5,.437,.375,.312,.25,.187,.125,.0625}
+DM={16,12,8,6,4,3,2,1,.75,.625,.5,.375,.25,.187,.125,.0625}
+VL={20,40,60,80,95,112,127}
 PV={0,1,2,4}
 sr=48 si={2,2,1,2,2,2,1} asd=1 cs={}
 sadj={0,0,0,0,0,0,0}
@@ -38,9 +39,9 @@ end
 function ucpd() local b=tro<7 and 30+tro*15 or 120+(tro-6)*20 cpd=15/(b+tfi) if tr2 and not ms then icl.time=cpd end end
 function ublk() blk=false end
 function nls(t,s)
-local st=cpd local r=du[t][s] or 1 local m=DM[17-gdu[t]] or 1
-if r>=5 then return st*m end
-return mx(st*((r-1)/4)*m,.02)
+local st=cpd local r=du[t][s] or 0 local m=DM[17-gdu[t]] or 1
+local frac=r==0 and 0.1 or r/5
+return mx(st*frac*m,.02)
 end
 function aliw(t) return als[t]>ale[t] end
 function ainl(t,s)
@@ -93,10 +94,8 @@ end
 function mnf(t,s)
 local ni=no[t][s] or 1
 local as=aph[t] or 1
-local av=an2[t][as]
-if av~=nil and av>0 then
-ni=ni+av
-end
+local av=an2[t][as] or 0
+ni=((ni-1)+av)%7+1
 local adj=sadj[((ni-1)%7)+1] or 0
 return clamp((cs[ni] or sr)+adj+(OR[oc[t][s]] or 0)+(GO[go2[t]] or 0),0,127)
 end
@@ -104,7 +103,7 @@ function son(t,s)
 if mute[t] then return end
 local mn=mnf(t,s)
 if an[t]>=0 then midi_note_off(an[t],0,TCH[t]) nom[t]:stop() end
-midi_note_on(mn,100,TCH[t]) an[t]=mn nom[t]:start(nls(t,s))
+midi_note_on(mn,VL[ve[t][s] or 6],TCH[t]) an[t]=mn nom[t]:start(nls(t,s))
 end
 function sof(t)
 if an[t]>=0 then midi_note_off(an[t],0,TCH[t]) an[t]=-1 nom[t]:stop() end
@@ -259,7 +258,7 @@ n=n+1 b[n]=SC(gdu[1],gdu[2],gdu[3],gdu[4])
 n=n+1 b[n]=SC(sdir[1],sdir[2],sdir[3],sdir[4])
 n=n+1 b[n]=SC(mute[1] and 1 or 0,mute[2] and 1 or 0,mute[3] and 1 or 0,mute[4] and 1 or 0)
 for t=1,4 do
-for s=1,STEPS do n=n+1 b[n]=SC(4) end
+for s=1,STEPS do n=n+1 b[n]=SC(ve[t][s]) end
 end
 n=n+1 b[n]=SC(tclk[1] and 1 or 0,tclk[2] and 1 or 0,tclk[3] and 1 or 0,tclk[4] and 1 or 0)
 n=n+1 b[n]=SC(nsyn and 1 or 0,lsyn)
@@ -283,7 +282,7 @@ du[t][s]=dv
 prb[t][s]=clamp(B(d,o+5) or 4,1,4)
 rdv[t][s]=clamp(B(d,o+6) or 1,1,5)
 rsl[t][s]=B(d,o+7) or 1
-an2[t][s]=(B(d,o+8) or 49)-50
+an2[t][s]=clamp((B(d,o+8) or 50)-50,0,6)
 end
 local b=tb+128
 ph[t]=clamp(B(d,b+1) or 1,1,STEPS)
@@ -301,6 +300,7 @@ sr=B(d,g+1) asd=B(d,g+2)
 for i=1,7 do si[i]=B(d,g+2+i) end
 local q=g+9
 for t=1,4 do go2[t]=clamp(B(d,q+t),1,8) gdu[t]=clamp(B(d,q+4+t),1,16) sdir[t]=clamp(B(d,q+8+t),1,5) mute[t]=B(d,q+12+t)==1 end
+if #d>=633 then for t=1,4 do for s=1,STEPS do ve[t][s]=clamp(B(d,570+(t-1)*16+(s-1)) or 6,1,7) end end end
 if #d>=637 then for t=1,4 do tclk[t]=B(d,633+t)==1 end end
 if #d>=639 then nsyn=B(d,638)==1 lsyn=B(d,639) end
 if asd<1 or asd>16 then asd=1 end
@@ -312,7 +312,7 @@ else
 for t=1,4 do
 for s=1,STEPS do
 tr[t][s]=false no[t][s]=1 oc[t][s]=ODR du[t][s]=0 prb[t][s]=4
-rdv[t][s]=1 rsl[t][s]=1 an2[t][s]=-1
+rdv[t][s]=1 rsl[t][s]=1 an2[t][s]=0 ve[t][s]=6
 end
 ph[t]=1 ls[t]=1 le[t]=STEPS dv2[t]=1 dc[t]=0
 aph[t]=1 als[t]=1 ale[t]=STEPS adv2[t]=1 adc[t]=0 addr[t]=1 nph[t]=1 tclk[t]=false
@@ -360,7 +360,7 @@ function dnav()
 for x=1,16 do gl(x,8,F) end
 for t=1,4 do
 local b
-if t==at then b=BF
+if t==at then b=mute[t] and 10 or BF
 else b=mute[t] and 1 or 5 end
 gl(t,8,b)
 end
@@ -368,6 +368,7 @@ for i=1,4 do
 local b
 if vm==11 and i==1 then b=blk and BF or D
 elseif vm==12 and i==2 then b=blk and BF or D
+elseif vm==13 and i==3 then b=blk and BF or D
 elseif vm==i then b=BF
 else b=D end
 gl(5+i,8,b)
@@ -376,18 +377,18 @@ gl(11,8,mlh and BF or D)
 gl(12,8,mth and BF or D)
 gl(13,8,mph and BF or D)
 gl(15,8,(vm==6) and BF or D)
-gl(16,8,(vm==7) and BF or (tr2 and (cbt==0 and BF or (cpls and M or D)) or D))
+gl(16,8,tr2 and (cbt==0 and BF or (cpls and M or D)) or (vm==7 and BF or D))
 end
 function dtr()
 for t=1,4 do
 local mu=mute[t] local sel=(t==at)
 for s=1,STEPS do
 local b
-if s==ph[t] then b=tr2 and (mu and M or BF) or M
+if s==ph[t] and tr2 then b=mu and H or BF
 elseif inl(t,s) then
-if tr[t][s] then b=mu and M or M
-else b=sel and D or 1 end
-else b=tr[t][s] and (mu and 1 or D) or F end
+if tr[t][s] then b=M
+else b=mu and 1 or (sel and D or 1) end
+else b=tr[t][s] and (mu and 2 or D) or F end
 gl(s,t,b)
 end
 end
@@ -418,19 +419,29 @@ for r=1,7 do
 local av=7-r
 for s=1,STEPS do
 local b
-if an2[at][s]==av then
-if tr2 and s==aph[at] then b=BF elseif ainl(at,s) then b=H else b=M end
+local iph=tr2 and s==aph[at]
+local itr=tr[at][s]
+if an2[at][s]==av and itr then
+if iph then b=BF elseif ainl(at,s) then b=H else b=M end
 else
-if r==7 then
-if an2[at][s]==-1 then
-b=(tr2 and s==aph[at]) and D or (tr[at][s] and 5 or 1)
-else
-b=(tr2 and s==aph[at]) and D or F
+if iph then b=D elseif r==7 and itr then b=1 else b=F end
 end
-else
-b=(tr2 and s==aph[at]) and D or F
+gl(s,r,b)
 end
 end
+end
+function dve()
+local t=at
+for s=1,STEPS do
+local iph=tr2 and s==ph[t]
+local itr=tr[t][s]
+local vr=8-(ve[t][s] or 6)
+for r=1,7 do
+local b
+if r==vr and itr then
+if iph then b=BF elseif inl(t,s) then b=H else b=M end
+elseif iph then b=D
+else b=F end
 gl(s,r,b)
 end
 end
@@ -469,12 +480,12 @@ if r==1 then
 if s==gdu[at] then b=BF
 else b=F end
 elseif r==2 then
-if iph then b=10
-elseif itr then b=D
+if iph then b=BF
+elseif itr then b=M
 else b=F end
 else
 if itr and sel>0 and r<=sel+2 then
-if iph then b=10 else b=D end
+if iph then b=BF else b=M end
 else b=F end
 end
 gl(s,r,b)
@@ -490,11 +501,13 @@ for r=2,6 do
 local slot=7-r
 local b
 if slot<=nd then
+if itr then
 if rget(at,s,slot) then
-if iph then b=BF elseif itr then b=H else b=D end
+if iph then b=BF else b=H end
 else
-if iph then b=M else b=D end
+if iph then b=BF else b=M end
 end
+else b=F end
 else b=iph and 1 or F end
 gl(s,r,b)
 end
@@ -542,10 +555,10 @@ end
 function dprb()
 for s=1,STEPS do
 local p=prb[at][s] or 4
-local sel=6-p
+local sel=5-p
 local iph=tr2 and s==ph[at]
 local itr=tr[at][s]
-for r=2,5 do
+for r=1,4 do
 local b
 if r==sel then
 if iph then b=BF elseif itr then b=H else b=D end
@@ -578,6 +591,7 @@ end
 gl(1,7,fldfl and BF or D)
 gl(2,7,pclh and H or 1)
 gl(3,7,fsafl and BF or D)
+gl(6,7,D) gl(7,7,D)
 gl(15,7,tr2 and BF or D)
 gl(16,7,D)
 end
@@ -610,14 +624,19 @@ for t=1,4 do
 local lw=nm and als[t] or ls[t]
 local lx=nm and ale[t] or le[t]
 local wr=liw(t) if nm then wr=aliw(t) end
+local sel=(t==at) local mu=mute[t]
 for s=1,STEPS do
 local b local iep=(s==lw or s==lx) local iin
 if wr then iin=(s>lw or s<lx) else iin=(s>lw and s<lx) end
 local sph=nm and aph[t] or ph[t]
+local itr=tr[t][s]
 if tr2 and s==sph then b=BF
-elseif iep then b=(t==at) and BF or H
-elseif iin then b=(t==at) and M or D
-else b=F end
+elseif iep or iin then
+if itr then b=(sel and not mu) and M or D
+else b=sel and (mu and 1 or D) or 1 end
+else
+b=itr and 1 or F
+end
 if lft==t and lfc==s then b=BF end
 gl(s,t,b)
 end
@@ -637,7 +656,7 @@ end
 end
 function rd()
 cg("step",1)
-if vm==11 or vm==12 then blk=not blk end
+if vm==11 or vm==12 or vm==13 then blk=not blk end
 grid_led_all(F)
 if cfh then dcfg()
 elseif tmh then dtim()
@@ -648,12 +667,17 @@ elseif mth then dtm()
 elseif mph then dprb()
 elseif vm==11 then drch()
 elseif vm==12 then dano()
+elseif vm==13 then dve()
 elseif vm==1 then dtr()
 elseif vm==2 then dno()
 elseif vm==3 then doc()
 elseif vm==4 then ddu()
 elseif vm==6 then dsc()
 elseif vm==7 then dpat()
+end
+if mlh or mth or mph then
+gl(6,7,D) gl(7,7,D)
+gl(15,7,tr2 and BF or D) gl(16,7,D)
 end
 end
 gr()
@@ -734,7 +758,7 @@ gl(x,8,BF) gr()
 return
 end
 at=x cpt=x
-if vm>=1 and vm<=4 or vm==11 or vm==12 then clrt=x shm:stop() shm:start(2.0) end
+if vm>=1 and vm<=4 or vm==11 or vm==12 or vm==13 then clrt=x shm:stop() shm:start(2.0) end
 elseif x==6 then
 if vm==1 then vm=11
 elseif vm==11 then vm=1 blk=false
@@ -744,11 +768,19 @@ if vm==2 then vm=12
 elseif vm==12 then vm=2 blk=false
 else ublk() vm=2 end
 elseif x==8 then
-ublk() vm=3
+if vm==3 then vm=13
+elseif vm==13 then vm=3 blk=false
+else ublk() vm=3 end
 elseif x==9 then
 ublk() vm=4
 end
 rd() return
+end
+if (mlh or mth or mph) and y==7 then
+if x==7 then cfh=(z==1) rd() return end
+if x==6 then tmh=(z==1) if not tmh then thk=nil shm:stop() end rd() return end
+if x==15 and z==1 then pts() return end
+if x==16 and z==1 then rts() return end
 end
 if mlh then
 if y>=1 and y<=4 and x>=1 and x<=STEPS then
@@ -788,20 +820,21 @@ return
 end
 if mph then
 if z==0 then return end
-if y>=2 and y<=5 and x>=1 and x<=STEPS then
-prb[at][x]=6-y
+if y>=1 and y<=4 and x>=1 and x<=STEPS then
+prb[at][x]=5-y
 rd()
 end
 return
 end
 if vm==11 then
 if z==1 and (y==1 or y==7) then
-rchy=y rchx=x shm:start(HT)
+if tr[at][x] then rchy=y rchx=x shm:start(HT) end
 return
 end
 if z==0 then
 if (y==1 or y==7) and rchx==x and rchy==y then
 shm:stop()
+if tr[at][x] then
 if y==1 then
 local nd=(rdv[at][x] or 1)+1
 if nd>5 then nd=5 end
@@ -813,6 +846,7 @@ rdv[at][x]=nd
 rset(at,x,nd+1,false)
 if not rget(at,x,1) then rset(at,x,1,true) end
 end
+end
 rchy=nil rchx=nil rd()
 elseif rchy==y then
 shm:stop() rchy=nil rchx=nil
@@ -820,6 +854,7 @@ end
 return
 end
 if y>=2 and y<=6 and x>=1 and x<=STEPS and z==1 then
+if not tr[at][x] then return end
 local slot=7-y
 local nd=rdv[at][x] or 1
 if slot>nd then
@@ -839,16 +874,19 @@ end
 if vm==12 then
 if z==0 then return end
 if y>=1 and y<=7 and x>=1 and x<=STEPS then
-if y==7 then
-an2[at][x]=-1
-else
-local av=7-y
-if an2[at][x]==av then
-an2[at][x]=-1
-else
-an2[at][x]=av
+an2[at][x]=7-y
+rd()
 end
+return
 end
+if vm==13 then
+if z==0 then return end
+if y>=1 and y<=7 and x>=1 and x<=STEPS then
+local vv=8-y
+if nsyn then
+if ve[at][x]==vv and tr[at][x] then tr[at][x]=false rdv[at][x]=1 rsl[at][x]=1
+else ve[at][x]=vv tr[at][x]=true end
+else ve[at][x]=vv end
 rd()
 end
 return
@@ -857,21 +895,19 @@ if z==1 then kvm=vm end
 if vm==6 and z==0 then
 if shk and shk[1]==y and shk[2]==x then shk=nil end
 if scph and scph[1]==y and scph[2]==x then scph=nil end
-if sch and x==1 and y==sch then
-if scfc==0 then TCH[sch]=1 end
-sch=nil rd()
-end
 return
 end
-if y==7 and x==7 and (vm==1 or cfh) then
+if y==7 and x==7 and (vm==1 or vm==7 or mlh or mth or mph or cfh) then
 cfh=(z==1)
 rd() return
 end
-if y==7 and x==6 and (vm==1 or tmh) then
+if y==7 and x==6 and (vm==1 or vm==7 or mlh or mth or mph or tmh) then
 tmh=(z==1)
 if not tmh then thk=nil shm:stop() end
 rd() return
 end
+if y==7 and x==15 and z==1 and (mlh or mth or mph) then pts() return end
+if y==7 and x==16 and z==1 and (mlh or mth or mph) then rts() return end
 if cfh then
 if z==0 then return end
 if y>=3 and y<=6 and x>=2 and x<=5 then
@@ -955,18 +991,28 @@ rd()
 end
 elseif vm==3 then
 if y==1 and x>=1 and x<=8 then go2[at]=x rd()
-elseif y>=2 and y<=7 and x>=1 and x<=STEPS then oc[at][x]=y rd() end
+elseif y>=2 and y<=7 and x>=1 and x<=STEPS then
+if nsyn then
+if oc[at][x]==y and tr[at][x] then tr[at][x]=false rdv[at][x]=1 rsl[at][x]=1
+else oc[at][x]=y tr[at][x]=true end
+else oc[at][x]=y end
+rd() end
 elseif vm==4 then
 if y==1 and x>=1 and x<=16 then gdu[at]=x rd()
-elseif y==2 and x>=1 and x<=STEPS then du[at][x]=0 rd()
-elseif y>=3 and y<=7 and x>=1 and x<=STEPS then du[at][x]=y-2 rd() end
+elseif y>=2 and y<=7 and x>=1 and x<=STEPS then
+local dv=y==2 and 0 or y-2
+if nsyn then
+if du[at][x]==dv and tr[at][x] then tr[at][x]=false rdv[at][x]=1 rsl[at][x]=1
+else du[at][x]=dv tr[at][x]=true end
+else du[at][x]=dv end
+rd() end
 elseif vm==6 then
-if y>=1 and y<=4 and x==1 and not sch then
-sch=y scfc=0 rd()
+if sch and y==sch and x>=1 and x<=16 then
+TCH[sch]=x sch=nil rd()
+elseif y>=1 and y<=4 and x==1 and not sch then
+sch=y rd()
 elseif y>=1 and y<=4 and x==2 and not sch then
 tclk[y]=not tclk[y] nph[y]=als[y] rd()
-elseif sch and y==sch and x>=2 and x<=16 then
-TCH[sch]=x scfc=x rd()
 elseif (y==6 or y==7) and x>=1 and x<=8 then
 local slot=y==6 and x or x+8
 if shld then
@@ -1035,24 +1081,23 @@ vm=1 at=1
 nsyn=true lsyn=2
 mlh=false mth=false mph=false cfh=false tmh=false lfc=nil lft=nil
 tr={} no={} oc={} du={} ph={} ls={} le={} dv2={} dc={} an={}
-go2={3,3,3,3} gdu={16,16,16,16} sdir={1,1,1,1} ddr={1,1,1,1}
+go2={3,3,3,3} gdu={9,9,9,9} sdir={1,1,1,1} ddr={1,1,1,1}
 mute={false,false,false,false}
 prb={} rdv={} rsl={}
-an2={} aph={} als={} ale={} adv2={} adc={} addr={}
+an2={} ve={} aph={} als={} ale={} adv2={} adc={} addr={}
 tclk={false,false,false,false} nph={1,1,1,1}
 blk=false
 for t=1,4 do
 tr[t]={} no[t]={} oc[t]={} du[t]={} prb[t]={} rdv[t]={} rsl[t]={}
-an2[t]={}
+an2[t]={} ve[t]={}
 ph[t]=1 ls[t]=1 le[t]=6 dv2[t]=1 dc[t]=0 an[t]=-1
 aph[t]=1 als[t]=1 ale[t]=le[t] adv2[t]=1 adc[t]=0 addr[t]=1
 for s=1,STEPS do
 tr[t][s]=false no[t][s]=1 oc[t][s]=ODR du[t][s]=0 prb[t][s]=4
 rdv[t][s]=1 rsl[t][s]=1
-an2[t][s]=-1
+an2[t][s]=0 ve[t][s]=6
 end
 end
-tr[1][1]=true oc[1][1]=5
 ms=false tr2=false cp=0 pt={} PB=8 sp=6 cpls=false cbt=0
 thk=nil tht=0 sch=nil scfc=0 cpt=nil clrt=nil fsh=nil fld=nil fsa=nil psi=false pclh=false
 nom={}
@@ -1104,7 +1149,9 @@ for s=1,STEPS do no[t][s]=1 tr[t][s]=false end
 elseif vm==3 then
 for s=1,STEPS do oc[t][s]=ODR end go2[t]=3
 elseif vm==4 then
-for s=1,STEPS do du[t][s]=0 end gdu[t]=16
+for s=1,STEPS do du[t][s]=0 end gdu[t]=9
+elseif vm==13 then
+for s=1,STEPS do ve[t][s]=6 end
 end
 clrt=nil shm:stop() rd()
 gl(t,8,BF) gr()
