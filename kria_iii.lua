@@ -17,7 +17,8 @@ GO={-24,-12,0,12,24,36,48,60}
 NP=16
 DM={16,12,8,6,4,3,2,1,.75,.625,.5,.375,.25,.187,.125,.0625}
 VL={20,40,60,80,95,112,127}
-PV={0,1,2,4}
+PP={{false,false,false,false},{true,false,false,false},{true,false,true,false},{true,true,true,false},{true,true,true,true}}
+WK={0,2,4,5,7,9,11}
 sr=48 si={2,2,1,2,2,2,1} asd=1 cs={}
 sadj={0,0,0,0,0,0,0}
 shk=nil
@@ -163,10 +164,14 @@ function adv(t)
 dc[t]=(dc[t] or 0)+1
 if dc[t]<DV[dv2[t] or 1] then return false end
 dc[t]=0
-if not pld then ph[t]=nxs(t) adva(t) end
+if not pld then
+ph[t]=nxs(t) adva(t)
+local d2=sdir[t] or 1
+if (d2==2 and ph[t]==le[t]) or (d2~=2 and ph[t]==ls[t]) then lc[t]=(lc[t]+1)%4 end
+end
 if mute[t] then sof(t) return true end
 if tr[t][ph[t]] then
-if mr(4)<=PV[prb[t][ph[t]] or 4] then
+if PP[prb[t][ph[t]] or 5][lc[t]+1] then
 local nd=rdv[t][ph[t]] or 1
 local ns=tclk[t] and nph[t] or ph[t]
 if nd<=1 then
@@ -219,6 +224,8 @@ if upd then rd() end
 end
 function sic() icl:stop() icl:start(cpd) end
 function stc() icl:stop() end
+function sid() idl:start() end
+function eid() idl:stop() end
 -- == external midi clock ==
 function event_midi(b1,b2,b3)
 if b1==0xF8 then
@@ -229,14 +236,15 @@ if not ms then ms=true stc() cp=0 for t=1,4 do dc[t]=0 adc[t]=0 end end
 if #pt>=2 then cpd=((pt[#pt]-pt[1])/(#pt-1))*sp end
 cp=cp+1 if cp>=sp then cp=0 tka() end
 elseif b1==0xFA or b1==0xFB then
-ms=true tr2=true stc() cp=0 pt={} cbt=0 cpls=false ccc=0
+ms=true tr2=true stc() eid() cp=0 pt={} cbt=0 cpls=false ccc=0
+for t=1,4 do lc[t]=0 end
 for t=1,4 do
 ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=0 aph[t]=(sdir[t]==2 and ale[t] or als[t]) adc[t]=0 nph[t]=als[t]
 if tr[t][ph[t]] then son(t,ph[t]) else sof(t) end
 end
 rd()
-elseif b1==0xFC then tr2=false ms=false pt={} ucpd() ano()
-for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) aph[t]=(sdir[t]==2 and ale[t] or als[t]) nph[t]=als[t] end
+elseif b1==0xFC then tr2=false ms=false pt={} ucpd() ano() sid()
+for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) aph[t]=(sdir[t]==2 and ale[t] or als[t]) nph[t]=als[t] lc[t]=0 end
 rd()
 end
 end
@@ -279,7 +287,7 @@ oc[t][s]=ov
 local dv=B(d,o+4)
 if dv>5 then dv=1 end
 du[t][s]=dv
-prb[t][s]=clamp(B(d,o+5) or 4,1,4)
+prb[t][s]=clamp(B(d,o+5) or 5,1,5)
 rdv[t][s]=clamp(B(d,o+6) or 1,1,5)
 rsl[t][s]=B(d,o+7) or 1
 an2[t][s]=clamp((B(d,o+8) or 50)-50,0,6)
@@ -311,7 +319,7 @@ if pats[p] then rst(pats[p])
 else
 for t=1,4 do
 for s=1,STEPS do
-tr[t][s]=false no[t][s]=1 oc[t][s]=ODR du[t][s]=0 prb[t][s]=4
+tr[t][s]=false no[t][s]=1 oc[t][s]=ODR du[t][s]=0 prb[t][s]=5
 rdv[t][s]=1 rsl[t][s]=1 an2[t][s]=0 ve[t][s]=6
 end
 ph[t]=1 ls[t]=1 le[t]=STEPS dv2[t]=1 dc[t]=0
@@ -360,8 +368,8 @@ function dnav()
 for x=1,16 do gl(x,8,F) end
 for t=1,4 do
 local b
-if t==at then b=mute[t] and 10 or BF
-else b=mute[t] and 1 or 5 end
+if t==at then b=mute[t] and (blk2 and 10 or F) or BF
+else b=mute[t] and (blk2 and 1 or F) or 5 end
 gl(t,8,b)
 end
 for i=1,4 do
@@ -382,6 +390,7 @@ end
 function dtr()
 for t=1,4 do
 local mu=mute[t] local sel=(t==at)
+if not mu or blk2 then
 for s=1,STEPS do
 local b
 if s==ph[t] and tr2 then b=mu and H or BF
@@ -390,6 +399,7 @@ if tr[t][s] then b=M
 else b=mu and 1 or (sel and D or 1) end
 else b=tr[t][s] and (mu and 2 or D) or F end
 gl(s,t,b)
+end
 end
 end
 gl(6,7,D)
@@ -530,10 +540,10 @@ end
 for i=1,8 do gl(i,6,(i==asd) and BF or D) end
 for i=1,8 do gl(i,7,(i+8==asd) and BF or D) end
 local ro=(sr-48)%12
-for c=9,16 do
-local s2=c-9
-if s2==ro then gl(c,7,BF)
-elseif s2==0 then gl(c,7,D)
+for i=1,7 do
+local o=WK[i] local c=8+i
+if ro==o then gl(c,7,BF)
+elseif ro==o+1 and i~=3 and i~=7 then gl(c,7,blk and BF or D)
 else gl(c,7,F) end
 end
 for r=1,6 do
@@ -554,11 +564,11 @@ end
 end
 function dprb()
 for s=1,STEPS do
-local p=prb[at][s] or 4
-local sel=5-p
+local p=prb[at][s] or 5
+local sel=6-p
 local iph=tr2 and s==ph[at]
 local itr=tr[at][s]
-for r=1,4 do
+for r=1,5 do
 local b
 if r==sel then
 if iph then b=BF elseif itr then b=H else b=D end
@@ -574,9 +584,9 @@ if pflash>0 then pflash=pflash-1 end
 for p=1,NP do
 local b
 if pflash>0 and (p==pflx or pflx==-1) then b=BF
-elseif p==ap then b=H
+elseif p==ap then b=psx[p] and H or M
 elseif cued and p==cued then b=9
-elseif psx[p] then b=5 else b=1 end
+elseif psx[p] then b=4 else b=1 end
 gl(p,1,b)
 end
 if cclk<1 then cclk=1 end
@@ -656,7 +666,8 @@ end
 end
 function rd()
 cg("step",1)
-if vm==11 or vm==12 or vm==13 then blk=not blk end
+if vm==11 or vm==12 or vm==13 or vm==6 then blk=not blk end
+bct=bct+1 if bct>=4 then bct=0 blk2=not blk2 end
 grid_led_all(F)
 if cfh then dcfg()
 elseif tmh then dtim()
@@ -685,16 +696,16 @@ end
 -- == transport & tempo ==
 function pts()
 if not ms then
-if tr2 then tr2=false ano() stc() midi_out(MCC)
-for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) aph[t]=(sdir[t]==2 and ale[t] or als[t]) nph[t]=als[t] end
+if tr2 then tr2=false ano() stc() sid() midi_out(MCC)
+for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) aph[t]=(sdir[t]==2 and ale[t] or als[t]) nph[t]=als[t] lc[t]=0 end
 else tr2=true cbt=0 cpls=false ccc=0
-for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=DV[dv2[t] or 1]-1 aph[t]=(sdir[t]==2 and ale[t] or als[t]) adc[t]=0 nph[t]=als[t] end
-pld=true ucpd() sic() midi_out(MCA) end
+for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=DV[dv2[t] or 1]-1 aph[t]=(sdir[t]==2 and ale[t] or als[t]) adc[t]=0 nph[t]=als[t] lc[t]=0 end
+pld=true ucpd() sic() eid() midi_out(MCA) end
 rd() end
 end
 function rts()
 ccc=0
-for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=0 aph[t]=(sdir[t]==2 and ale[t] or als[t]) adc[t]=0 nph[t]=als[t] end
+for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=0 aph[t]=(sdir[t]==2 and ale[t] or als[t]) adc[t]=0 nph[t]=als[t] lc[t]=0 end
 if tr2 then
 for t=1,4 do if not mute[t] and tr[t][ph[t]] then son(t,ph[t]) end end
 cp=0 if not ms then sic() end
@@ -820,8 +831,8 @@ return
 end
 if mph then
 if z==0 then return end
-if y>=1 and y<=4 and x>=1 and x<=STEPS then
-prb[at][x]=5-y
+if y>=1 and y<=5 and x>=1 and x<=STEPS then
+prb[at][x]=6-y
 rd()
 end
 return
@@ -957,8 +968,7 @@ end
 fsh=nil
 end
 if vm==7 and y==7 and x==1 and fld then
-if fldfl then fload() rd() end
-fld=nil fldfl=false shm:stop()
+fld=nil fldfl=false shm:stop() rd()
 end
 if vm==7 and y==7 and x==2 then
 pclh=false rd()
@@ -1033,8 +1043,10 @@ end
 shk=nil bsc() rd()
 elseif x>=4 and x<=8 and y>=1 and y<=4 then
 sdir[y]=x-3 ddr[y]=1 rd()
-elseif y==7 and x>=9 and x<=16 then
-sr=48+(x-9) bsc() rd()
+elseif y==7 and x>=9 and x<=15 then
+local o=WK[x-8] local wk=48+o
+if sr==wk and x~=11 and x~=15 then sr=wk+1 elseif sr==wk+1 then sr=wk else sr=wk end
+bsc() rd()
 elseif x>=9 and x<=16 and y>=1 and y<=6 then
 local idx=7-y
 local ni=8-y
@@ -1052,7 +1064,7 @@ end
 elseif vm==7 then
 if y==1 and x>=1 and x<=NP then
 if pclh then
-pats[x]=nil psx[x]=false
+pats[x]=nil psx[x]=false pcall(pset_write,x,"")
 if ap==x then ap=1 end
 cg("collect")
 rd()
@@ -1086,18 +1098,19 @@ mute={false,false,false,false}
 prb={} rdv={} rsl={}
 an2={} ve={} aph={} als={} ale={} adv2={} adc={} addr={}
 tclk={false,false,false,false} nph={1,1,1,1}
-blk=false
+blk=false blk2=false bct=0
 for t=1,4 do
 tr[t]={} no[t]={} oc[t]={} du[t]={} prb[t]={} rdv[t]={} rsl[t]={}
 an2[t]={} ve[t]={}
 ph[t]=1 ls[t]=1 le[t]=6 dv2[t]=1 dc[t]=0 an[t]=-1
 aph[t]=1 als[t]=1 ale[t]=le[t] adv2[t]=1 adc[t]=0 addr[t]=1
 for s=1,STEPS do
-tr[t][s]=false no[t][s]=1 oc[t][s]=ODR du[t][s]=0 prb[t][s]=4
+tr[t][s]=false no[t][s]=1 oc[t][s]=ODR du[t][s]=0 prb[t][s]=5
 rdv[t][s]=1 rsl[t][s]=1
 an2[t][s]=0 ve[t][s]=6
 end
 end
+lc={0,0,0,0}
 ms=false tr2=false cp=0 pt={} PB=8 sp=6 cpls=false cbt=0
 thk=nil tht=0 sch=nil scfc=0 cpt=nil clrt=nil fsh=nil fld=nil fsa=nil psi=false pclh=false
 nom={}
@@ -1124,6 +1137,8 @@ end,.1)
 end
 icl=metro.init(function() if tka then tka() end end,.125)
 icl:stop()
+idl=metro.init(function() rd() end,0.25)
+idl:start()
 phl=nil pht=nil HT=0.8 kvm=0 shld=false scph=nil
 cued=nil cclk=16 ccc=0 cdc=0 clt=1 cman=false pth=false pflash=0 pflx=0 fldfl=false fsafl=false
 rchy=nil rchx=nil
@@ -1161,7 +1176,7 @@ if ok then ap=phl pflx=phl pflash=8 fsh={get_time(),phl} end
 phl=nil
 shm:stop() rd()
 elseif fld or fsa then
-if fld then fldfl=true gl(1,7,BF) gr() end
+if fld then fldfl=true fload() pflash=3 pflx=-1 rd() end
 if fsa then fsafl=true gl(3,7,BF) gr() end
 shm:stop()
 else shm:stop() end
