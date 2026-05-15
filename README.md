@@ -9,7 +9,6 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - **kria_iii.lua** — the script to upload to iii
 - **kria_iii_manual.html** — open in a browser for the full manual
    https://aktsom.github.io/kria_iii/kria_iii_manual.html
-- **kria_iii_commented.lua** — fully annotated reading reference (do not upload — exceeds iii source buffer)
 
 
 ## features
@@ -24,9 +23,19 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - internal tempo control (30-300bpm) and external MIDI clock input
 - configurable MIDI channel per track, MIDI clock output
 
+## what's new in v1.4.0
+
+- **probability expanded to 5 rows** — 100 / 75 / 50 / 25 / 0%. now deterministic: each level follows a fixed 4-loop cycle rather than random rolls, so patterns are predictable and musical
+- **white-key root selection with sharps** — scale page root now uses a piano-style layout. press a white key for natural, press again to sharpen (C# D# F# G# A#). sharp root blinks while active
+- **muted tracks blink** — muted tracks blink slowly on the nav row and across their step rows on all pages, making mute state visible at a glance
+- **pattern load feedback** — saved pattern slots now light up at the same moment as the load confirmation, making the visual feedback clear and instant
+- **idle animation** — buttons continue to blink and animate when transport is stopped, so the grid stays informative while editing
+- **velocity page** — per-step velocity control added as a second-press sub-page on the octave button (blinks when active)
+- **ui improvements** — cleaner visual feedback across pattern, navigation, and scale pages
+
 ## requirements
 
-- monome grid 128
+- designed for monome grid one (128). should work on grid zero (256) using the top 8 rows — untested.
 - iii scripting environment
 
 ## usage
@@ -35,4 +44,4 @@ upload `kria_iii.lua` via the iii web interface. See `kria_iii_manual.html` for 
 
 ## version
 
-v1.1.0
+v1.4.0
