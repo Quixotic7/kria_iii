@@ -25,15 +25,15 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 
 ## what's new in v1.4.0
 
-- **probability expanded to 5 rows** — 100 / 75 / 50 / 25 / 0%. now deterministic: each level follows a fixed 4-loop cycle rather than random rolls, so patterns are predictable and musical
-- **white-key root selection with sharps** — scale page root now uses a piano-style layout. press a white key for natural, press again to sharpen (C# D# F# G# A#). sharp root blinks while active
-- **muted tracks blink** — muted tracks blink slowly on the nav row and across their step rows on all pages, making mute state visible at a glance
-- **pattern load feedback** — saved pattern slots now light up at the same moment as the load confirmation, making the visual feedback clear and instant
-- **idle animation** — buttons continue to blink and animate when transport is stopped, so the grid stays informative while editing
-- **velocity page** — per-step velocity control added as a second-press sub-page on the octave button (blinks when active)
-- **ui improvements** — cleaner visual feedback across pattern, navigation, and scale pages
-- **sharp root shortcut** — hold step 16 on the scale page + press any root key to toggle sharp immediately, without double-tapping. useful when changing root live
-
+* **probability expanded to 5 rows** - 100 / 75 / 50 / 25 / 0%. now deterministic: each level follows a fixed 4-loop cycle rather than random rolls, so patterns are predictable
+* **white-key root selection with sharps** - scale page root now uses a piano-style layout. press a white key for natural, press again to sharpen (C# D# F# G# A#). sharp root blinks while active
+* **sharp root shortcut** - hold step 16 on the scale page + press any root key to toggle sharp immediately, without double-tapping. useful when changing root live
+* **velocity page** - per-step velocity control added as a second-press sub-page on the octave button (blinks when active)
+* **duration page** improved behaviour
+* **muted tracks blink** - muted tracks blink slowly on the nav row and across their step rows on all pages, making mute state visible at a glance
+* **pattern load feedback** - saved pattern slots now light up at the same moment as the load confirmation, making the visual feedback clear and instant
+* **idle animation** - buttons continue to blink and animate when transport is stopped, so the grid stays informative while editing
+* **ui improvements** - cleaner visual feedback across pattern, navigation, and scale pages
 ## requirements
 
 - designed for monome grid one (128). should work on grid zero (256) using the top 8 rows — untested.
