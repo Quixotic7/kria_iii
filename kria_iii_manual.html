@@ -216,7 +216,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <li><span class="k">step 6:</span> trigger page. press again = ratchet sub-page (blinks). <span class="k">step 7:</span> note page. press again = alt note (blinks). <span class="k">step 8:</span> octave page. press again = velocity (blinks). <span class="k">step 9:</span> duration page.</li>
   <li><span class="k">step 11:</span> loop mod (hold). <span class="k">step 12:</span> time division mod (hold). <span class="k">step 13:</span> probability mod (hold).</li>
   <li><span class="k">step 15:</span> scale page <span class="k">step 16:</span> pattern page. when transport is running, step 16 pulses to beat.</li>
-  <li><span class="k">mute:</span> hold loop (step 11) + press a track button. muted tracks blink on all pages.</li>
+  <li><span class="k">mute:</span> hold loop (step 11) + press a track button. muted tracks are dimmed on all pages — loop brace, triggers and playhead remain visible at reduced brightness.</li>
   <li><span class="k">track copy:</span> hold source track button, press destination — copies current page data.</li>
   <li><span class="k">track clear:</span> hold track button ~2s - resets current page data for that track.</li>
   <li><span class="k">time / config / play / reset</span> are also available while holding loop, time division, or probability mods.</li>
@@ -443,6 +443,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-cfg"></div>
 <ul class="fl">
   <li><span class="k">note sync (square icon):</span> on = pressing a step on the note, octave, duration, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.</li>
+  <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a new loop arms a pending snap instead of applying immediately. the snap fires when any running track whose loop length is at least as long as the new loop completes a cycle. pending snap endpoints blink in the loop mod view. default = off.</li>
   <li><span class="k">loop sync - track (step 12, row 3):</span> when setting a track's trigger loop, the alt-note loop for that track follows automatically.</li>
   <li><span class="k">loop sync - all (steps 11-14, row 6):</span> all four tracks share loop points. default = on.</li>
 </ul>
@@ -490,6 +491,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <tr><td>midi channels</td><td>track 1-4 = ch 1-4</td></tr>
 <tr><td>scale</td><td>ionian (preset 1), root C</td></tr>
 <tr><td>note sync</td><td>on</td></tr>
+<tr><td>loop snap</td><td>off</td></tr>
 <tr><td>loop sync</td><td>all</td></tr>
 </table>
 </div>

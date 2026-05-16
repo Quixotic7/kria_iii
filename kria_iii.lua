@@ -167,7 +167,18 @@ dc[t]=0
 if not pld then
 ph[t]=nxs(t) adva(t)
 local d2=sdir[t] or 1
-if (d2==2 and ph[t]==le[t]) or (d2~=2 and ph[t]==ls[t]) then lc[t]=(lc[t]+1)%4 end
+if (d2==2 and ph[t]==le[t]) or (d2~=2 and ph[t]==ls[t]) then
+lc[t]=(lc[t]+1)%4
+local tlen=llen(t)
+for tt=1,4 do
+if psnap[tt] then
+local slen=(psnap[tt][2]-psnap[tt][1]+STEPS)%STEPS+1
+if tlen>=slen then
+ls[tt]=psnap[tt][1] le[tt]=psnap[tt][2] ph[tt]=ls[tt] psnap[tt]=nil
+end
+end
+end
+end
 end
 if mute[t] then sof(t) return true end
 if tr[t][ph[t]] then
@@ -270,6 +281,7 @@ for s=1,STEPS do n=n+1 b[n]=SC(ve[t][s]) end
 end
 n=n+1 b[n]=SC(tclk[1] and 1 or 0,tclk[2] and 1 or 0,tclk[3] and 1 or 0,tclk[4] and 1 or 0)
 n=n+1 b[n]=SC(nsyn and 1 or 0,lsyn)
+n=n+1 b[n]=lsnap and 1 or 0
 return table.concat(b)
 end
 function rst(d)
@@ -311,6 +323,7 @@ for t=1,4 do go2[t]=clamp(B(d,q+t),1,8) gdu[t]=clamp(B(d,q+4+t),1,16) sdir[t]=cl
 if #d>=633 then for t=1,4 do for s=1,STEPS do ve[t][s]=clamp(B(d,570+(t-1)*16+(s-1)) or 6,1,7) end end end
 if #d>=637 then for t=1,4 do tclk[t]=B(d,633+t)==1 end end
 if #d>=639 then nsyn=B(d,638)==1 lsyn=B(d,639) end
+if #d>=640 then lsnap=B(d,640)==1 end
 if asd<1 or asd>16 then asd=1 end
 bsc() crs() scph=nil shk=nil
 end
@@ -390,16 +403,14 @@ end
 function dtr()
 for t=1,4 do
 local mu=mute[t] local sel=(t==at)
-if not mu or blk2 then
 for s=1,STEPS do
 local b
-if s==ph[t] and tr2 then b=mu and H or BF
+if s==ph[t] and tr2 then b=mu and 7 or BF
 elseif inl(t,s) then
-if tr[t][s] then b=M
-else b=mu and 1 or (sel and D or 1) end
-else b=tr[t][s] and (mu and 2 or D) or F end
+if tr[t][s] then b=mu and (sel and 5 or 2) or M
+else b=mu and (sel and 3 or 1) or (sel and D or 1) end
+else b=tr[t][s] and (mu and (sel and 2 or 1) or D) or F end
 gl(s,t,b)
-end
 end
 end
 gl(6,7,D)
@@ -612,6 +623,7 @@ for r=3,6 do for c=2,5 do
 if r==3 or r==6 or c==2 or c==5 then gl(c,r,nb) end
 end end
 gl(12,3,lsyn==1 and BF or D)
+gl(14,3,lsnap and BF or 1)
 for c=11,14 do gl(c,6,lsyn==2 and BF or D) end
 end
 function dtim()
@@ -641,15 +653,22 @@ local b local iep=(s==lw or s==lx) local iin
 if wr then iin=(s>lw or s<lx) else iin=(s>lw and s<lx) end
 local sph=nm and aph[t] or ph[t]
 local itr=tr[t][s]
-if tr2 and s==sph then b=BF
-elseif iep or iin then
-if itr then b=(sel and not mu) and M or D
-else b=sel and (mu and 1 or D) or 1 end
+if tr2 and s==sph then b=mu and 7 or BF
+elseif iep then
+if mu then b=sel and 3 or 1
+else b=itr and (sel and M or D) or (sel and D or 1) end
+elseif iin then
+if itr then b=mu and (sel and 5 or 2) or (sel and M or D)
+else b=mu and (sel and 3 or 1) or (sel and D or 1) end
 else
-b=itr and 1 or F
+b=itr and (mu and (sel and 2 or 1) or 1) or F
 end
 if lft==t and lfc==s then b=BF end
 gl(s,t,b)
+end
+if psnap[t] then
+gl(psnap[t][1],t,blk and D or F)
+gl(psnap[t][2],t,blk and D or F)
 end
 end
 end
@@ -800,20 +819,30 @@ local t=y
 if z==1 then
 local nm=vm==2 or vm==12
 if lft==nil then
+if lsnap and not nm then lsave_ls[t]=ls[t] lsave_le[t]=le[t] end
 lft=t lfc=x
 if nm then als[t]=x ale[t]=x else ls[t]=x le[t]=x end
 else
 local lf=lft
+local snapped=false
+if lsnap and not nm then
+snapped=true psnap[lf]={lfc,x}
+ls[lf]=lsave_ls[lf] le[lf]=lsave_le[lf]
+end
+if not snapped then
 if nm then als[lf]=lfc ale[lf]=x
 if not ainl(lf,aph[lf]) then aph[lf]=lfc end
 else ls[lf]=lfc le[lf]=x
 if not inl(lf,ph[lf]) then ph[lf]=lfc end end
 end
+if not snapped then
 local ref=lft or t
 local P1,P2=nm and als or ls,nm and ale or le
 local Q1,Q2=nm and ls or als,nm and le or ale
 if lsyn==2 then for tt=1,4 do P1[tt]=P1[ref] P2[tt]=P2[ref] Q1[tt]=P1[tt] Q2[tt]=P2[tt] end
 else if lsyn==1 or nsyn then Q1[ref]=P1[ref] Q2[ref]=P2[ref] end end
+end
+end
 else
 if lft==t and lfc==x then lft=nil lfc=nil end
 end
@@ -927,6 +956,8 @@ if y>=3 and y<=6 and x>=2 and x<=5 then
 nsyn=not nsyn rd()
 elseif y==3 and x==12 then
 lsyn=(lsyn==1) and 0 or 1 rd()
+elseif y==3 and x==14 then
+lsnap=not lsnap rd()
 elseif y==6 and x>=11 and x<=14 then
 lsyn=(lsyn==2) and 0 or 2 rd()
 end
@@ -1107,6 +1138,7 @@ prb={} rdv={} rsl={}
 an2={} ve={} aph={} als={} ale={} adv2={} adc={} addr={}
 tclk={false,false,false,false} nph={1,1,1,1}
 blk=false blk2=false bct=0 shphl=false
+lsnap=false psnap={} lsave_ls={} lsave_le={}
 for t=1,4 do
 tr[t]={} no[t]={} oc[t]={} du[t]={} prb[t]={} rdv[t]={} rsl[t]={}
 an2[t]={} ve[t]={}

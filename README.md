@@ -30,7 +30,8 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 * **sharp root shortcut** - hold step 16 on the scale page + press any root key to toggle sharp immediately, without double-tapping. useful when changing root live
 * **velocity page** - per-step velocity control added as a second-press sub-page on the octave button (blinks when active)
 * **duration page** improved behaviour
-* **muted tracks blink** - muted tracks blink slowly on the nav row and across their step rows on all pages, making mute state visible at a glance
+* **muted tracks dim** - muted tracks are always visible but dimmed on all pages. loop brace, triggers and playhead remain readable at reduced brightness
+* **loop snap** - config toggle (step 14, row 3) for quantized loop setting. when on, a new loop is held as a pending snap and fires when a running track long enough to contain it completes a cycle, keeping loop changes in sync
 * **pattern load feedback** - saved pattern slots now light up at the same moment as the load confirmation, making the visual feedback clear and instant
 * **idle animation** - buttons continue to blink and animate when transport is stopped, so the grid stays informative while editing
 * **ui improvements** - cleaner visual feedback across pattern, navigation, and scale pages
