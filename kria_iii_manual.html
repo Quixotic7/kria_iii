@@ -443,9 +443,9 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-cfg"></div>
 <ul class="fl">
   <li><span class="k">note sync (square icon):</span> on = pressing a step on the note, octave, duration, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.</li>
-  <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a new loop arms a pending snap instead of applying immediately. the snap fires when any running track whose loop length is at least as long as the new loop completes a cycle. pending snap endpoints blink in the loop mod view. default = off.</li>
+  <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a new loop arms a pending snap instead of applying immediately. the snap fires when any running track whose loop length is at least as long as the new loop completes a cycle. pending snap endpoints blink in the loop mod view. turning on loop snap disables loop sync all. default = off.</li>
   <li><span class="k">loop sync - track (step 12, row 3):</span> when setting a track's trigger loop, the alt-note loop for that track follows automatically.</li>
-  <li><span class="k">loop sync - all (steps 11-14, row 6):</span> all four tracks share loop points. default = on.</li>
+  <li><span class="k">loop sync - all (steps 11-14, row 6):</span> all four tracks share loop points. turning on loop sync all disables loop snap. default = on.</li>
 </ul>
 <p class="desc" style="margin-top:12px">note: kria_iii syncs two loop layers per track (trigger and alt note). the original kria supports independent loops per parameter.</p>
 </div>

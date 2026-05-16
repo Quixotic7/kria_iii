@@ -775,12 +775,18 @@ rd() return
 end
 if x>=1 and x<=4 then
 if cpt and cpt~=x then
-if vm==1 or vm==11 then
+if vm==1 then
 for s=1,STEPS do tr[x][s]=tr[cpt][s] end
-elseif vm==2 or vm==12 then
+elseif vm==11 then
+for s=1,STEPS do tr[x][s]=tr[cpt][s] rsl[x][s]=rsl[cpt][s] rdv[x][s]=rdv[cpt][s] end
+elseif vm==2 then
 for s=1,STEPS do no[x][s]=no[cpt][s] tr[x][s]=tr[cpt][s] end
+elseif vm==12 then
+for s=1,STEPS do no[x][s]=no[cpt][s] tr[x][s]=tr[cpt][s] an2[x][s]=an2[cpt][s] end
 elseif vm==3 then
 for s=1,STEPS do oc[x][s]=oc[cpt][s] end
+elseif vm==13 then
+for s=1,STEPS do ve[x][s]=ve[cpt][s] end
 elseif vm==4 then
 for s=1,STEPS do du[x][s]=du[cpt][s] end
 end
@@ -957,9 +963,9 @@ nsyn=not nsyn rd()
 elseif y==3 and x==12 then
 lsyn=(lsyn==1) and 0 or 1 rd()
 elseif y==3 and x==14 then
-lsnap=not lsnap rd()
+lsnap=not lsnap if lsnap and lsyn==2 then lsyn=0 end rd()
 elseif y==6 and x>=11 and x<=14 then
-lsyn=(lsyn==2) and 0 or 2 rd()
+lsyn=(lsyn==2) and 0 or 2 if lsyn==2 and lsnap then lsnap=false end rd()
 end
 return
 end
