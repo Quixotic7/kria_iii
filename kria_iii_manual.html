@@ -213,10 +213,16 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-nav"></div>
 <ul class="fl">
   <li><span class="k">steps 1-4:</span> select active track.</li>
-  <li><span class="k">step 6:</span> trigger page. press again = ratchet sub-page. <span class="k">step 7:</span> note page. press again = alt note. <span class="k">step 8:</span> octave page. press again = velocity. <span class="k">step 9:</span> duration page.</li>
-  <li><span class="k">step 11:</span> loop mod (hold). <span class="k">step 12:</span> time division mod (hold). <span class="k">step 13:</span> probability mod (hold).</li>
-  <li><span class="k">step 15:</span> scale page. <span class="k">step 16:</span> pattern page. when transport is running, step 16 pulses to beat.</li>
-  <li><span class="k">mute:</span> hold loop mod + press a track button. muted tracks are dimmed on all pages.</li>
+  <li><span class="k">trigger page:</span> step 6, press again = ratchet sub-page.</li> 
+  <li><span class="k">note page:</span> step 7, press again = alt note.</li>
+  <li><span class="k">octave page:</span> step 8, press again = velocity.</li>
+  <li><span class="k">duration page:</span> step 9</li>
+  <li><span class="k">loop mod:</span> hold step 11</li>
+  <li><span class="k">time division mod:</span> hold step 12</li>
+  <li><span class="k">probability mod:</span> hold step 13</li>
+  <li><span class="k">scale page:</span> step 15</li>
+  <li><span class="k">pattern page:</span> step 16. when transport is running, step 16 pulses to beat.</li>
+  <li><span class="k">mute track:</span> hold loop mod + press a track button. muted tracks are dimmed on all pages.</li>
   <li><span class="k">track copy:</span> hold source track button, press destination track - copies current page data (parameter pages).</li>
   <li><span class="k">track clear:</span> hold track button ~2s - resets current page data for that track.</li>
   <li><span class="k">time / config / play / reset</span> are also available while holding loop, time division, or probability mods.</li>
@@ -277,7 +283,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ─── VELOCITY ──────────────────────────────────────── -->
 <div class="ps" id="vel">
 <h2>velocity page</h2>
-<p class="pn">step 8 (second press) - blinks when active</p>
+<p class="pn">step 8 - second press</p>
 <p class="desc"></p>
 <div id="g-vel"></div>
 <table class="dt">
@@ -289,7 +295,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ─── RATCHET ───────────────────────────────────────── -->
 <div class="ps" id="ratch">
 <h2>trigger ratchet</h2>
-<p class="pn">step 6 (second press) - blinks when active</p>
+<p class="pn">step 6 - second press</p>
 <p class="desc"></p>
 <div id="g-ratch"></div>
 <div class="gn"></div>
@@ -303,7 +309,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ─── ALT NOTE ──────────────────────────────────────── -->
 <div class="ps" id="alt">
 <h2>alt note</h2>
-<p class="pn">step 7 (second press) - blinks when active</p>
+<p class="pn">step 7 - second press</p>
 <p class="desc"><span class="k">a parallel 16-step sequence with its own loop and clock division. each step holds a scale degree offset (0-6) added to the main note when a trigger fires. the combined index wraps within the scale.</span></p>
 <div id="g-alt"></div>
 <div class="gn"></div>
