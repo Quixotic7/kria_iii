@@ -4,20 +4,28 @@ based on ansible kria by monome
 
 ════════════════════════════════════════════════════════════════
 
-NAVIGATION — row 8
+NAVIGATION 
+row 8
 
-› steps 1-4: select active track. full brightness = selected. medium = unselected. muted tracks are dimmed.
-› step 6: trigger page. press again = ratchet sub-page (blinks). step 7: note page. press again = alt note (blinks). step 8: octave page. press again = velocity (blinks). step 9: duration page.
-› step 11: loop mod (hold). step 12: time division mod (hold). step 13: probability mod (hold).
-› step 15: scale page. step 16: pattern page. when transport is running, step 16 pulses to beat.
-› mute: hold loop (step 11) + press a track button. muted tracks are dimmed on all pages — loop brace, triggers and playhead remain visible at reduced brightness.
-› track copy: hold source track button, press destination — copies current page data.
+› steps 1-4: select active track.
+› step 6: trigger page. press again = ratchet sub-page. 
+  step 7: note page. press again = alt note. 
+  step 8: octave page. press again = velocity. 
+  step 9: duration page.
+› step 11: loop mod (hold). 
+  step 12: time division mod (hold). 
+  step 13: probability mod (hold).
+› step 15: scale page. 
+  step 16: pattern page. when transport is running, step 16 pulses to beat.
+› mute: hold loop mod + press a track button. muted tracks are dimmed on all pages
+› track copy: hold source track button, press destination track - copies current page data (parameter pages).
 › track clear: hold track button ~2s - resets current page data for that track.
 › time / config / play / reset are also available while holding loop, time division, or probability mods.
 
 ════════════════════════════════════════════════════════════════
 
-TRIGGER PAGE — step 6
+TRIGGER PAGE
+step 6
 
 › rows 1-4, steps 1-16: press to toggle triggers.
 › play/stop (row 7, step 15): toggles transport. disabled when external midi clock is active.
@@ -25,46 +33,66 @@ TRIGGER PAGE — step 6
 
 ════════════════════════════════════════════════════════════════
 
-NOTE PAGE — step 7
+NOTE PAGE 
+step 7
 
-› press a step: sets note for that step. 7 rows = 7 scale degrees. row 7 = degree 1 (root), row 1 = degree 7 (highest).
-› note quantization (scale page): when enabled per track, the pitch playhead advances on each trigger fire rather than each clock step.
+› press a step: sets note for that step. 7 rows = 7 scale degrees. 
+  row 7 = degree 1 (root) 
+  row 1 = degree 7 (highest)
+
+› note quantization: 
+  (scale page, step 2 in track row): when enabled per track, the pitch playhead advances on each trigger fire rather than each clock step.
 
 ════════════════════════════════════════════════════════════════
 
-OCTAVE PAGE — step 8
+OCTAVE PAGE
+step 8
 
 row 1 global offset:
   step   1    2    3 (default)  4    5    6    7    8
   semi   -24  -12  0            +12  +24  +36  +48  +60
 
-› rows 2-7 per-step: row 2 = +3 oct, row 3 = +2, row 4 = +1, row 5 = 0, row 6 = -1, row 7 = -2 oct.
+› rows 2-7, per-step: row 2 = +3 oct, row 3 = +2, row 4 = +1, row 5 = 0, row 6 = -1, row 7 = -2 oct.
 
 ════════════════════════════════════════════════════════════════
 
-DURATION PAGE — step 9
+DURATION PAGE
+step 9
 
-› row 1, steps 1-16: global duration multiplier for the active track. step 9 = default (~1 step). step 16 = whole note. step 1 = very short.
-› rows 2-7: per-step note length. row 2 = shortest (staccato). row 7 = 100% of step length.
+› row 1, steps 1-16: global duration multiplier for the active track. 
+  step 1 = very short.
+  step 9 = default (~1 step). 
+  step 16 = whole note. 
+  
+› rows 2-7: per-step note length. 
+  row 2 = shortest (staccato). 
+  row 7 = 100% of step length.
 
 ════════════════════════════════════════════════════════════════
 
-VELOCITY PAGE — step 8 (second press, blinks when active)
+VELOCITY PAGE
+step 8, second press
 
   row       1    2 (default)  3   4   5   6   7
   velocity  127  112          95  80  60  40  20
 
 ════════════════════════════════════════════════════════════════
 
-TRIGGER RATCHET — step 6 (second press, blinks when active)
+TRIGGER RATCHET
+step 6, second press
 
-› rows 2-6: toggle ratchet slots on/off. lit = fires, dim = rest. pressing a slot above the current count extends the count to include it.
+› rows 2-6: toggle ratchet slots on/off. 
+  lit = fires 
+  dim = rest 
+  pressing a slot above the current count extends the count to include it.
+
 › row 1 tap: +1 subdivision (max 5). row 1 hold: fill all steps to max.
 › row 7 tap: -1 subdivision (min 1). row 7 hold: reset step to 1 subdivision.
 
 ════════════════════════════════════════════════════════════════
 
-ALT NOTE — step 7 (second press, blinks when active)
+ALT NOTE
+step 7, second press
 
 a parallel 16-step sequence with its own loop and clock division. each step holds a scale degree offset (0-6) added to the main note when a trigger fires. the combined index wraps within the scale.
 
@@ -72,18 +100,19 @@ a parallel 16-step sequence with its own loop and clock division. each step hold
 
 ════════════════════════════════════════════════════════════════
 
-LOOP MOD — step 11, hold
+LOOP MOD
+step 11, hold
 
-rows 1-4: one row per track · active track brighter
-
-› setting a loop: first press = loop start, second press = loop end. loops can wrap — end left of start wraps around step 16.
+› setting a loop: first press = loop start, second press = loop end. 
+  loops can wrap around step 16 to step 3 for example.
 › on note or alt note page: shows and edits the alt-note loop. all other pages: shows the trigger loop.
 › any track's loop can be edited, not just the active track.
-› mute: while holding loop mod (step 11), press a track button to toggle mute.
+› mute: while holding loop mod, press a track button to toggle mute.
 
 ════════════════════════════════════════════════════════════════
 
-TIME DIVISION MOD — step 12, hold
+TIME DIVISION MOD 
+step 12, hold
 
 rows 1-4: division per track · active track = full brightness
 
@@ -94,9 +123,10 @@ rows 1-4: division per track · active track = full brightness
 
 ════════════════════════════════════════════════════════════════
 
-PROBABILITY MOD — step 13, hold
+PROBABILITY MOD
+step 13, hold
 
-per-step deterministic probability over a 4-loop cycle.
+per-step deterministic probability
 
   row  probability              pattern (4-loop cycle)
   1    100% — always (default)  fires every loop
@@ -109,66 +139,77 @@ per-step deterministic probability over a 4-loop cycle.
 
 ════════════════════════════════════════════════════════════════
 
-SCALE PAGE — step 15
+SCALE PAGE
+step 15
 
-- per-track settings (rows 1-4)
-› step 1 (midi channel): tap to open channel select for that track — all 16 steps show channels 1-16. tap a channel to assign and close.
-› step 2 (note quantization): toggle - pitch advances on trigger fires instead of clock steps.
-› steps 4-8 (direction): forward · reverse · pingpong · random walk · random.
+- per-track settings: rows 1-4
+› select midi channel: tap step 1 to open channel select for that track - all 16 steps show channels 1-16. tap a channel to assign and close.
+› note quantization: toggle step 2 - pitch advances on trigger fires instead of clock steps.
+› direction: steps 4-8 = forward · reverse · pingpong · random walk · random.
 
-- scale interval editor (rows 1-6, steps 9-16)
+- scale interval editor: rows 1-6, steps 9-16
 › each row = one scale interval (semitones between consecutive degrees). steps 9-16 = 0-7 semitones. bright = current value.
-› press: set interval, rebuild scale, save to preset.
-› hold scale (step 15) + press interval: stretch mode - adjusts interval and compensates adjacent to preserve range.
-› press same interval twice: micro-adjust mode - shifts that degree's pitch without changing the preset.
+› hold scale page button (nav row, step 15) + press interval: stretch mode - adjusts interval and compensates adjacent to preserve range.
+› press same interval twice: adjust mode - shifts that degree's pitch without changing the preset.
 
-- root note (row 7, steps 9-15)
-› steps 9-15 = white keys C through B. press once to select a natural root. press the same key again to sharpen it (C#, D#, F#, G# or A# - E and B have no sharp). a sharp root blinks. press again to return to natural.
-› step 16 (sharp shortcut): hold step 16 + press any root key to toggle sharp on/off immediately — useful when changing root live without double-tapping.
+- root note: row 7, steps 9-15
+› root C through B = steps 9-15. press once to select a natural root. press the same step again to sharpen it (C#, D#, F#, G# or A# - E and B have no sharp). a sharp root blinks. press again to return to natural.
+› sharp shortcut: hold step 16 + press any root key to toggle sharp on/off immediately - useful when changing root live without double-tapping.
 › all notes across all tracks transpose to the new root immediately.
 
-- scale presets (rows 6-7, steps 1-8)
-› 16 preset slots. bright = active. press to switch. presets 1-7 = musical modes, 8-16 = chromatic.
-› copy preset: press destination, then hold scale (step 15) + press source.
-› reset to factory: hold scale (step 15) + press a preset slot.
+- scale presets: rows 6-7, steps 1-8
+› 16 preset slots. bright = active. press to switch. 
+  presets 1-8 = ionian/major, dorian, phrygian, lydian, mixolydian, aeolian/minor, locrian, chromatic. hold scale page button + preset to reset to default. 
+  presets 9-16 = chromatic. can be used for user presets.
+› copy preset: press source preset slot + press destination slot.
+› reset to factory: hold scale page button (step 15) + press a preset slot.
 
 ════════════════════════════════════════════════════════════════
 
-PATTERN PAGE — step 16
+PATTERN PAGE
+step 16
 
 › row 1: 16 pattern slots. short press = load immediately. hold ~1s = save to slot. hold ~3s = save + write to flash.
 › cue pattern: hold pattern page button (step 16) + press slot. loads when cue clock expires.
 › row 2: manual cue clock length (1-16 steps). pattern loads after this many steps of the longest active loop.
-› row 7 step 1: load all from flash (hold ~2s - all saved slots flash on confirm).
-› row 7 step 2: clear mode - hold step 2 + pattern slot clears that slot and removes it from flash.
-› row 7 step 3: save all to flash (hold ~2s).
-› row 7 step 15: play/stop. step 16: reset.
+
+- load all / clear/ save all: row 7
+› load all patterns from flash: hold step 1 for ~2s - all saved slots flash on confirm.
+› clear mode: hold step 2 + pattern slot - clears that slot and removes it from flash.
+› save all patterns: save all to flash (hold ~2s).
+› play/stop: press step 15 to start/stop transport. 
+  reset: press step 16 to reset all playheads.
 
 ════════════════════════════════════════════════════════════════
 
-TIME PAGE — hold step 6, row 7
+TIME PAGE
+hold step 6, row 7
 
 - internal clock:
-› row 2 (rough bpm): steps 1-7 = 30-120 bpm in 15 bpm steps · steps 8-16 = 140-300 bpm in 20 bpm steps. step 7 = default (120 bpm).
-› row 3 (fine): +0 to +15 bpm offset. step 1 = default (+0).
-› row 4 steps 7-10: hold to nudge tempo. step 7 = -4, step 8 = -1, step 9 = +1, step 10 = +4 bpm.
+› rough bpm: row 2, steps 1-7 = 30-120 bpm in 15 bpm steps · steps 8-16 = 140-300 bpm in 20 bpm steps. step 7 = default (120 bpm).
+› fine: row 3, step 1 = default (+0). every step is +1 bpm offset up to step 16 (+15). 
+› hold to nudge tempo: row 4 - step 7 = -4, step 8 = -1, step 9 = +1, step 10 = +4 bpm.
 
   step  1   2   3   4   5   6    7    8    9    10   11   12   13   14   15   16
   bpm   30  45  60  75  90  105  120  140  160  180  200  220  240  260  280  300
 
 - external midi clock:
-› detected automatically. row 2 shows incoming bpm (read-only). row 3 steps 6-11: step resolution (8th notes to 16th triplets, default = 16th notes at step 8).
+› detected automatically. row 2 shows incoming bpm. row 3 steps 6-11: step resolution (8th notes to 32th triplets, default = 16th notes at step 8).
 
 ════════════════════════════════════════════════════════════════
 
-CONFIG PAGE — hold step 7, row 7
+CONFIG PAGE
+hold step 7, row 7
 
 › note sync (square icon): on = pressing a step on the note, octave, duration, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.
+
+› loop sync - track (step 12, row 3): sets loop brace on one track at a time.
+
 › loop snap (step 14, row 3): when on, setting a new loop arms a pending snap instead of applying immediately. the snap fires when any running track whose loop length is at least as long as the new loop completes a cycle. pending snap endpoints blink in the loop mod view. turning on loop snap disables loop sync all. default = off.
-› loop sync - track (step 12, row 3): when setting a track's trigger loop, the alt-note loop for that track follows automatically.
+
 › loop sync - all (steps 11-14, row 6): all four tracks share loop points. turning on loop sync all disables loop snap. default = on.
 
-note: kria_iii syncs two loop layers per track (trigger and alt note). the original kria supports independent loops per parameter.
+note: kria_iii syncs only two loop layers per track (trigger and alt note). the original kria supports independent loops per parameter.
 
 ════════════════════════════════════════════════════════════════
 
@@ -179,40 +220,34 @@ GESTURES
   copy page data to another track           hold source track + press destination
   clear page data for track                 hold track button ~2s
   toggle mute                               hold loop mod (step 11) + press track
-  open sub-page (ratchet / alt note / vel)  press step 6, 7, or 8 again
-  toggle sharp root note                    press same root key twice - scale page
-  sharp root shortcut                       hold step 16 + press root key - scale page
-  stretch interval, compensate adjacent     hold scale (step 15) + press interval - scale page
-  micro-adjust scale degree                 press same interval twice - scale page
-  reset preset to factory                   hold scale (step 15) + press preset - scale page
-  copy preset                               press destination, hold scale (step 15) + press source - scale page
-  cue pattern                               hold pattern (step 16) + press slot - pattern page
-
+  cue pattern                               hold pattern page (step 16 nav row) + press slot
+  toggle sharp root note*                   press same root key twice
+  sharp root shortcut*                      hold step 16 + press root key
+  stretch interval, compensate adjacent*    hold scale page (step 15, nav row) + press interval
+  adjust scale degree*                      hold interval step + press another step in the same row
+  reset preset to factory*                  hold scale page (step 15, nav row) + press preset
+  copy preset*                              press destination, hold scale (step 15) + press source
+  
+  *scale page
 ════════════════════════════════════════════════════════════════
 
 DEFAULTS
 
   setting            default
   ────────────────────────────────────────────
-  triggers           none
   trigger loop       steps 1-6
-  clock division     1x
-  direction          forward
-  note               degree 1 (root) on all steps
+  scale              ionian (preset 1), root C
   octave global      step 3 (0 offset)
-  octave per-step    row 5 (0 offset)
-  duration global    step 9
-  duration per-step  row 2 (shortest)
   velocity           row 2 (112) on all steps
   probability        row 1 (100%) on all steps
-  alt note           degree 0 (unison) on all steps
-  ratchet            1 subdivision, slot 1 enabled
   tempo              120 bpm
+  clock division     1x
+  direction          forward
   midi channels      track 1-4 = ch 1-4
-  scale              ionian (preset 1), root C
+  
   note sync          on
   loop snap          off
   loop sync          all
 
 ════════════════════════════════════════════════════════════════
-kria iii — v1.4.0
+kria iii - v1.4.0

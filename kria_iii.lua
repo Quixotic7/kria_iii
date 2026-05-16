@@ -1,5 +1,4 @@
--- kria iii  v1.3.0
--- == constants ==
+-- kria iii v1.4.0
 collectgarbage("collect")
 STEPS=16 PPQN=24
 tro=6 tfi=0 cpd=0.125
@@ -22,10 +21,8 @@ WK={0,2,4,5,7,9,11}
 sr=48 si={2,2,1,2,2,2,1} asd=1 cs={}
 sadj={0,0,0,0,0,0,0}
 shk=nil
--- == api aliases ==
 gl=grid_led gr=grid_refresh cg=collectgarbage mr=math.random tu=table.unpack SC=string.char mx=math.max mf=math.floor
 
--- == scale / timing helpers ==
 function bsc()
 cs[1]=sr
 for i=2,7 do cs[i]=cs[i-1]+si[i-1] end
@@ -91,7 +88,6 @@ if adc[t]<DV[adv2[t] or 1] then return end
 adc[t]=0
 aph[t]=anxs(t)
 end
--- == midi note output ==
 function mnf(t,s)
 local ni=no[t][s] or 1
 local as=aph[t] or 1
@@ -150,7 +146,6 @@ if liw(t) and s>STEPS then s=s-STEPS end
 end
 return s
 end
--- == step advance & main tick ==
 pld=false
 function advnph(t)
 local s=nph[t]+1
@@ -237,7 +232,6 @@ function sic() icl:stop() icl:start(cpd) end
 function stc() icl:stop() end
 function sid() idl:start() end
 function eid() idl:stop() end
--- == external midi clock ==
 function event_midi(b1,b2,b3)
 if b1==0xF8 then
 if not tr2 then return end
@@ -259,7 +253,6 @@ for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) aph[t]=(sdir[t]==2 and ale[t]
 rd()
 end
 end
--- == pattern save / load ==
 function cap()
 local b={} local n=0
 for t=1,4 do
@@ -281,7 +274,8 @@ for s=1,STEPS do n=n+1 b[n]=SC(ve[t][s]) end
 end
 n=n+1 b[n]=SC(tclk[1] and 1 or 0,tclk[2] and 1 or 0,tclk[3] and 1 or 0,tclk[4] and 1 or 0)
 n=n+1 b[n]=SC(nsyn and 1 or 0,lsyn)
-n=n+1 b[n]=lsnap and 1 or 0
+n=n+1 b[n]=SC(lsnap and 1 or 0)
+for p=1,16 do local sp=SD[p] or {} for i=1,7 do n=n+1 b[n]=SC(sp[i] or 1) end end
 return table.concat(b)
 end
 function rst(d)
@@ -317,13 +311,14 @@ ddr[t]=1 dc[t]=0 adc[t]=0 addr[t]=1 nph[t]=als[t]
 end
 local g=544
 sr=B(d,g+1) asd=B(d,g+2)
-for i=1,7 do si[i]=B(d,g+2+i) end
+for i=1,7 do si[i]=B(d,g+2+i) end SD[asd]={tu(si)}
 local q=g+9
 for t=1,4 do go2[t]=clamp(B(d,q+t),1,8) gdu[t]=clamp(B(d,q+4+t),1,16) sdir[t]=clamp(B(d,q+8+t),1,5) mute[t]=B(d,q+12+t)==1 end
 if #d>=633 then for t=1,4 do for s=1,STEPS do ve[t][s]=clamp(B(d,570+(t-1)*16+(s-1)) or 6,1,7) end end end
 if #d>=637 then for t=1,4 do tclk[t]=B(d,633+t)==1 end end
 if #d>=639 then nsyn=B(d,638)==1 lsyn=B(d,639) end
 if #d>=640 then lsnap=B(d,640)==1 end
+if #d>=752 then for p=1,16 do SD[p]={} for i=1,7 do SD[p][i]=B(d,640+(p-1)*7+i) end end si={tu(SD[asd])} end
 if asd<1 or asd>16 then asd=1 end
 bsc() crs() scph=nil shk=nil
 end
@@ -371,12 +366,12 @@ cg("collect")
 end
 function fsaveall()
 pinit()
+pcall(svp,ap)
 for p=1,NP do
 if pats[p] then pcall(pset_write,p,hx(pats[p])) end
 cg("collect")
 end
 end
--- == grid draw ==
 function dnav()
 for x=1,16 do gl(x,8,F) end
 for t=1,4 do
@@ -686,8 +681,9 @@ end
 end
 function rd()
 cg("step",1)
-if vm==11 or vm==12 or vm==13 or vm==6 then blk=not blk end
-bct=bct+1 if bct>=4 then bct=0 blk2=not blk2 end
+bct=bct+1
+if bct==2 then blk=not blk end
+if bct>=4 then bct=0 blk2=not blk2 end
 grid_led_all(F)
 if cfh then dcfg()
 elseif tmh then dtim()
@@ -713,7 +709,6 @@ end
 end
 gr()
 end
--- == transport & tempo ==
 function pts()
 if not ms then
 if tr2 then tr2=false ano() stc() sid() midi_out(MCC)
@@ -730,7 +725,7 @@ if tr2 then
 for t=1,4 do if not mute[t] and tr[t][ph[t]] then son(t,ph[t]) end end
 cp=0 if not ms then sic() end
 end
-rd() gl(16,7,BF) gr()
+rd()
 end
 function tadj(k)
 local d=k==7 and -4 or k==8 and -1 or k==9 and 1 or 4
@@ -739,7 +734,6 @@ if tfi>15 then if tro<15 then tro=tro+1 tfi=0 else tfi=15 end
 elseif tfi<0 then if tro>0 then tro=tro-1 tfi=15 else tfi=0 end end
 ucpd() rd()
 end
--- == grid input ==
 function event_grid(x,y,z)
 if y==8 then
 if x==11 then
@@ -773,6 +767,7 @@ mute[x]=not mute[x]
 if mute[x] then sof(x) end
 rd() return
 end
+if (mth or mph) and x>=1 and x<=4 then rd() return end
 if x>=1 and x<=4 then
 if cpt and cpt~=x then
 if vm==1 then
@@ -1076,8 +1071,8 @@ gl(x,y,BF) gr()
 return
 else
 SD[asd]={tu(si)}
-if slot~=asd then asd=slot si={tu(SD[slot])} crs() scph={y,x}
-else gl(x,y,BF) gr() end
+if slot~=asd then asd=slot si={tu(SD[slot])} crs() end
+scph={y,x}
 end
 shk=nil bsc() rd()
 elseif x>=4 and x<=8 and y>=1 and y<=4 then
@@ -1116,7 +1111,7 @@ rd()
 elseif pth then
 cued=x rd()
 else
-phl=x shm:start(1.0)
+phl=x pht=get_time() shm:start(1.0)
 end
 elseif y==2 and x>=1 and x<=16 then
 cclk=x cman=true rd()
@@ -1131,7 +1126,6 @@ elseif y==7 and x==16 then rts()
 end
 end
 end
--- == init ==
 bsc()
 ap=1 pats={} psx={}
 vm=1 at=1
@@ -1158,7 +1152,7 @@ end
 end
 lc={0,0,0,0}
 ms=false tr2=false cp=0 pt={} PB=8 sp=6 cpls=false cbt=0
-thk=nil tht=0 sch=nil scfc=0 cpt=nil clrt=nil fsh=nil fld=nil fsa=nil psi=false pclh=false
+thk=nil sch=nil cpt=nil clrt=nil fsh=nil fld=nil fsa=nil psi=false pclh=false
 nom={}
 for t=1,4 do
 local tc=t
@@ -1218,7 +1212,7 @@ clrt=nil shm:stop() rd()
 gl(t,8,BF) gr()
 elseif phl and vm==7 then
 local ok=pcall(svp,phl)
-if ok then ap=phl pflx=phl pflash=8 fsh={get_time(),phl} end
+if ok then ap=phl pflx=phl pflash=8 fsh={pht,phl} end
 phl=nil
 shm:stop() rd()
 elseif fld or fsa then
@@ -1231,3 +1225,4 @@ shm:stop()
 grid_led_all(F)
 tr2=false
 rd()
+function cleanup() ano() end

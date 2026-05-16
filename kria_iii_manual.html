@@ -54,23 +54,23 @@ window.addEventListener('DOMContentLoaded',function(){
 
   // trigger page
   G('g-trig',
-    [[M,D,D,M,D,D,M,D,D,M,D,D,M,D,D,D],
-     [M,1,1,1,M,1,1,1,M,1,1,1,M,1,1,1],
-     [M,1,M,1,1,1,M,1,1,1,M,1,1,1,1,1],
-     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [[H,D,B,D,H,D,H,D,E,E,E,E,E,E,E,E],
+     [D,E,E,E,D,E,E,E,D,E,E,E,D,E,E,E],
+     [E,E,D,E,E,E,D,E,E,E,D,E,E,E,D,E],
+     [E,D,E,D,E,D,E,D,E,D,E,D,E,E,E,E],
      [E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],
-     [E,E,E,E,E,D,D,E,E,E,E,E,E,E,D,D],[B,5,5,5,E,B,D,D,D,E,D,D,D,E,D,D]],
+     [E,E,E,E,E,E,E,E,E,E,E,E,E,E,D,D],[B,5,5,5,E,B,D,D,D,E,D,D,D,E,D,D]],
     null);
 
   // note page
   G('g-note',
-    [[E,E,E,E,E,E,H,E,E,E,E,E,H,E,E,E],
-     [E,E,E,H,E,E,E,E,E,H,E,E,E,E,E,H],
-     [E,E,H,E,E,H,E,E,H,E,E,H,E,E,H,E],
-     [H,E,E,E,H,E,E,H,E,E,H,E,H,E,E,E],
-     [E,H,E,E,E,E,E,E,E,E,E,E,E,H,E,E],
-     [E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],
-     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[B,5,5,5,E,D,B,D,D,E,D,D,D,E,D,D]],
+    [[E,E,E,E,E,E,H,E,E,E,E,E,E,H,E,E],
+     [E,E,E,E,E,H,E,E,E,E,E,E,E,E,E,E],
+     [E,E,E,E,H,E,E,H,E,E,E,E,H,E,H,E],
+     [E,E,E,H,E,E,E,E,E,E,E,E,E,E,E,E],
+     [E,E,B,E,E,E,E,E,H,E,E,H,E,E,E,H],
+     [E,H,E,E,E,E,E,E,E,H,E,E,E,E,E,E],
+     [H,E,E,E,E,E,E,E,E,E,H,E,E,E,E,E],[B,5,5,5,E,D,B,D,D,E,D,D,D,E,D,D]],
     null);
 
   // octave page
@@ -192,7 +192,7 @@ window.addEventListener('DOMContentLoaded',function(){
   // config page
   G('g-cfg',
     [[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],
-     [E,H,H,H,H,E,E,E,E,E,E,B,E,E,E,E],
+     [E,H,H,H,H,E,E,E,E,E,E,B,E,D,E,E],
      [E,H,E,E,H,E,E,E,E,E,E,E,E,E,E,E],
      [E,H,E,E,H,E,E,E,E,E,E,E,E,E,E,E],
      [E,H,H,H,H,E,E,E,E,E,B,B,B,B,E,E],
@@ -204,7 +204,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <body>
 <div class="container">
 <h1>kria iii</h1>
-<p class="subtitle">monome grid one - 4-track midi step sequencer - v1.4.0<br>based on ansible kria by monome</p>
+<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.4.0<br>based on ansible kria by monome</span></p>
 
 <!-- ─── NAVIGATION ───────────────────────────────────── -->
 <div class="ps" id="nav">
@@ -212,12 +212,12 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="pn">row 8</p>
 <div id="g-nav"></div>
 <ul class="fl">
-  <li><span class="k">steps 1-4:</span> select active track</li>
-  <li><span class="k">step 6:</span> trigger page. press again = ratchet sub-page (blinks). <span class="k">step 7:</span> note page. press again = alt note (blinks). <span class="k">step 8:</span> octave page. press again = velocity (blinks). <span class="k">step 9:</span> duration page.</li>
+  <li><span class="k">steps 1-4:</span> select active track.</li>
+  <li><span class="k">step 6:</span> trigger page. press again = ratchet sub-page. <span class="k">step 7:</span> note page. press again = alt note. <span class="k">step 8:</span> octave page. press again = velocity. <span class="k">step 9:</span> duration page.</li>
   <li><span class="k">step 11:</span> loop mod (hold). <span class="k">step 12:</span> time division mod (hold). <span class="k">step 13:</span> probability mod (hold).</li>
-  <li><span class="k">step 15:</span> scale page <span class="k">step 16:</span> pattern page. when transport is running, step 16 pulses to beat.</li>
-  <li><span class="k">mute:</span> hold loop (step 11) + press a track button. muted tracks are dimmed on all pages — loop brace, triggers and playhead remain visible at reduced brightness.</li>
-  <li><span class="k">track copy:</span> hold source track button, press destination — copies current page data.</li>
+  <li><span class="k">step 15:</span> scale page. <span class="k">step 16:</span> pattern page. when transport is running, step 16 pulses to beat.</li>
+  <li><span class="k">mute:</span> hold loop mod + press a track button. muted tracks are dimmed on all pages.</li>
+  <li><span class="k">track copy:</span> hold source track button, press destination track - copies current page data (parameter pages).</li>
   <li><span class="k">track clear:</span> hold track button ~2s - resets current page data for that track.</li>
   <li><span class="k">time / config / play / reset</span> are also available while holding loop, time division, or probability mods.</li>
 </ul>
@@ -242,8 +242,8 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="desc"></p>
 <div id="g-note"></div>
 <ul class="fl">
-  <li><span class="k">press a step:</span> sets note for that step. 7 rows = 7 scale degrees. row 7 = degree 1 (root), row 1 = degree 7 (highest).</li>
-  <li><span class="k">note quantization (scale page):</span> when enabled per track, the pitch playhead advances on each trigger fire rather than each clock step.</li>
+  <li><span class="k">press a step:</span> sets note for that step. 7 rows = 7 scale degrees. row 7 = degree 1 (root). row 1 = degree 7 (highest).</li>
+  <li><span class="k">note quantization:</span> (scale page, step 2 in track row): when enabled per track, the pitch playhead advances on each trigger fire rather than each clock step.</li>
 </ul>
 </div>
 
@@ -254,11 +254,11 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-oct"></div>
 <div class="gn"></div>
 <table class="dt">
-<tr><th>row 1 step</th><th>1</th><th>2</th><th>3 (default)</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
-<tr><td>semitones</td><td>-24</td><td>-12</td><td class="k">0</td><td>+12</td><td>+24</td><td>+36</td><td>+48</td><td>+60</td></tr>
+<tr><th><span class="k">row 1 step</span></th><th>1</th><th>2</th><th>3 (default)</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
+<tr><td><span class="k">semitones</span></td><td>-24</td><td>-12</td><td class="k">0</td><td>+12</td><td>+24</td><td>+36</td><td>+48</td><td>+60</td></tr>
 </table>
 <ul class="fl">
-  <li><span class="k">rows 2-7 per-step:</span> row 2 = +3 oct, row 3 = +2, row 4 = +1, row 5 = 0, row 6 = -1, row 7 = -2 oct.</li>
+  <li><span class="k">rows 2-7, per-step:</span> row 2 = +3 oct, row 3 = +2, row 4 = +1, row 5 = 0, row 6 = -1, row 7 = -2 oct.</li>
 </ul>
 </div>
 
@@ -269,7 +269,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-dur"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">row 1, steps 1-16:</span> global duration multiplier for the active track. step 9 = default (~1 step). step 16 = whole note. step 1 = very short.</li>
+  <li><span class="k">row 1, steps 1-16:</span> global duration multiplier for the active track. step 1 = very short. step 9 = default (~1 step). step 16 = whole note.</li>
   <li><span class="k">rows 2-7:</span> per-step note length. row 2 = shortest (staccato). row 7 = 100% of step length.</li>
 </ul>
 </div>
@@ -281,8 +281,8 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="desc"></p>
 <div id="g-vel"></div>
 <table class="dt">
-<tr><th>row</th><th>1</th><th>2 (default)</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
-<tr><td>velocity</td><td class="k">127</td><td>112</td><td>95</td><td>80</td><td>60</td><td>40</td><td>20</td></tr>
+<tr><th><span class="k">row</span></th><th>1</th><th>2 (default)</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
+<tr><td><span class="k">velocity</span></td><td class="k">127</td><td>112</td><td>95</td><td>80</td><td>60</td><td>40</td><td>20</td></tr>
 </table>
 </div>
 
@@ -294,7 +294,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-ratch"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">rows 2-6:</span> toggle ratchet slots on/off. lit = fires, dim = rest. pressing a slot above the current count extends the count to include it.</li>
+  <li><span class="k">rows 2-6:</span> toggle ratchet slots on/off. lit = fires. dim = rest. pressing a slot above the current count extends the count to include it.</li>
   <li><span class="k">row 1 tap:</span> +1 subdivision (max 5). <span class="k">row 1 hold:</span> fill all steps to max.</li>
   <li><span class="k">row 7 tap:</span> -1 subdivision (min 1). <span class="k">row 7 hold:</span> reset step to 1 subdivision.</li>
 </ul>
@@ -304,7 +304,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="ps" id="alt">
 <h2>alt note</h2>
 <p class="pn">step 7 (second press) - blinks when active</p>
-<p class="desc">a parallel 16-step sequence with its own loop and clock division. each step holds a scale degree offset (0-6) added to the main note when a trigger fires. the combined index wraps within the scale.</p>
+<p class="desc"><span class="k">a parallel 16-step sequence with its own loop and clock division. each step holds a scale degree offset (0-6) added to the main note when a trigger fires. the combined index wraps within the scale.</span></p>
 <div id="g-alt"></div>
 <div class="gn"></div>
 <ul class="fl">
@@ -317,12 +317,12 @@ window.addEventListener('DOMContentLoaded',function(){
 <h2>loop mod</h2>
 <p class="pn">step 11 - hold</p>
 <div id="g-loop"></div>
-<div class="gn">rows 1-4: one row per track · active track brighter</div>
+<div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">setting a loop:</span> first press = loop start, second press = loop end. loops can wrap — end left of start wraps around step 16.</li>
+  <li><span class="k">setting a loop:</span> first press = loop start, second press = loop end. loops can wrap around step 16 to step 3 for example.</li>
   <li>on <span class="k">note or alt note page:</span> shows and edits the alt-note loop. all other pages: shows the trigger loop.</li>
   <li>any track's loop can be edited, not just the active track.</li>
-  <li><span class="k">mute:</span> while holding loop mod (step 11), press a track button to toggle mute.</li>
+  <li><span class="k">mute:</span> while holding loop mod, press a track button to toggle mute.</li>
 </ul>
 </div>
 
@@ -331,10 +331,10 @@ window.addEventListener('DOMContentLoaded',function(){
 <h2>time division mod</h2>
 <p class="pn">step 12 - hold</p>
 <div id="g-timediv"></div>
-<div class="gn">rows 1-4: division per track · active track = full brightness</div>
+<div class="gn"><span class="k">rows 1-4: division per track · active track = full brightness</span></div>
 <table class="dt">
-<tr><th>step</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr>
-<tr><td>div</td><td class="k">1x</td><td>2x</td><td>3x</td><td>4x</td><td>5x</td><td>6x</td><td>7x</td><td>8x</td><td>10x</td><td>12x</td><td>14x</td><td>16x</td><td>20x</td><td>24x</td><td>28x</td><td>32x</td></tr>
+<tr><th><span class="k">step</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr>
+<tr><td><span class="k">div</span></td><td class="k">1x</td><td>2x</td><td>3x</td><td>4x</td><td>5x</td><td>6x</td><td>7x</td><td>8x</td><td>10x</td><td>12x</td><td>14x</td><td>16x</td><td>20x</td><td>24x</td><td>28x</td><td>32x</td></tr>
 </table>
 <ul class="fl">
   <li>on the <span class="k">alt note page</span>, the active track's division sets the alt-note clock independently from the trigger division.</li>
@@ -345,13 +345,13 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="ps" id="prob">
 <h2>probability mod</h2>
 <p class="pn">step 13 - hold</p>
-<p class="desc">per-step deterministic probability over a 4-loop cycle.</p>
+<p class="desc"><span class="k">per-step deterministic probability</span></p>
 <div id="g-prob"></div>
 <table class="dt">
-<tr><th>row</th><th>probability</th><th>pattern (4-loop cycle)</th></tr>
-<tr><td class="k">1</td><td class="k">100% — always fires (default)</td><td>fires every loop</td></tr>
+<tr><th><span class="k">row</span></th><th><span class="k">probability</span></th><th><span class="k">pattern (4-loop cycle)</span></th></tr>
+<tr><td class="k">1</td><td class="k">100% — always (default)</td><td>fires every loop</td></tr>
 <tr><td>2</td><td>75%</td><td>fires loops 1-3, silent loop 4</td></tr>
-<tr><td>3</td><td>50%</td><td>fires loop 1, silent loop 2, fires loop 3, silent loop 4</td></tr>
+<tr><td>3</td><td>50%</td><td>fires loop 1, silent 2, fires 3, silent 4</td></tr>
 <tr><td>4</td><td>25%</td><td>fires loop 1, silent loops 2-4</td></tr>
 <tr><td>5</td><td>0% — never fires</td><td>always silent</td></tr>
 </table>
@@ -367,32 +367,31 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-scale"></div>
 <div class="gn"></div>
 
-<p class="desc" style="margin-top:12px">- per-track settings (rows 1-4)</p>
+<p class="desc" style="margin-top:12px"><span class="k">- per-track settings (rows 1-4)</span></p>
 <ul class="fl">
-  <li><span class="k">step 1 (midi channel):</span> tap to open channel select for that track — all 16 steps show channels 1-16. tap a channel to assign and close.</li>
-  <li><span class="k">step 2 (note quantization):</span> toggle - pitch advances on trigger fires instead of clock steps.</li>
-  <li><span class="k">steps 4-8 (direction):</span> forward · reverse · pingpong · random walk · random.</li>
+  <li><span class="k">select midi channel:</span> tap step 1 to open channel select for that track - all 16 steps show channels 1-16. tap a channel to assign and close.</li>
+  <li><span class="k">note quantization:</span> toggle step 2 - pitch advances on trigger fires instead of clock steps.</li>
+  <li><span class="k">direction:</span> steps 4-8 = forward · reverse · pingpong · random walk · random.</li>
 </ul>
 <br></br>
-<p class="desc" style="margin-top:12px">- scale interval editor (rows 1-6, steps 9-16)</p>
+<p class="desc" style="margin-top:12px"><span class="k">- scale interval editor (rows 1-6, steps 9-16)</span></p>
 <ul class="fl">
-  <li>each row = one scale interval (semitones between consecutive degrees). steps 9-16 = 0-7 semitones. bright = current value.</li>
-  <li><span class="k">press:</span> set interval, rebuild scale, save to preset.</li>
-  <li><span class="k">hold scale (step 15) + press interval:</span> stretch mode - adjusts interval and compensates adjacent to preserve range.</li>
-  <li><span class="k">press same interval twice:</span> micro-adjust mode - shifts that degree's pitch without changing the preset.</li>
+  <li><span class="k">each row =</span> one scale interval (semitones between consecutive degrees). steps 9-16 = 0-7 semitones. bright = current value.</li>
+  <li><span class="k">hold scale page button (nav row, step 15) + press interval:</span> stretch mode - adjusts interval and compensates adjacent to preserve range.</li>
+  <li><span class="k">hold interval step + press another step in the same row:</span> adjust mode - shifts that degree's pitch without changing the preset.</li>
 </ul>
 <br></br>
-<p class="desc" style="margin-top:12px">- root note (row 7, steps 9-15)</p>
+<p class="desc" style="margin-top:12px"><span class="k">- root note (row 7, steps 9-15)</span></p>
 <ul class="fl">
-  <li>steps 9-15 = white keys C through B. press once to select a natural root. press the same key again to sharpen it (C#, D#, F#, G# or A# - E and B have no sharp). a sharp root blinks. press again to return to natural.</li>
-  <li><span class="k">step 16 (sharp shortcut):</span> hold step 16 + press any root key to toggle sharp on/off immediately — useful when changing root live without double-tapping.</li>
+  <li><span class="k">root C through B:</span> steps 9-15. press once to select a natural root. press the same step again to sharpen it (C#, D#, F#, G# or A# - E and B have no sharp). a sharp root blinks. press again to return to natural.</li>
+  <li><span class="k">sharp shortcut:</span> hold step 16 + press any root key to toggle sharp on/off immediately - useful when changing root live without double-tapping.</li>
   <li>all notes across all tracks transpose to the new root immediately.</li>
 <br></br>
-<p class="desc" style="margin-top:12px">- scale presets (rows 6-7, steps 1-8)</p>
+<p class="desc" style="margin-top:12px"><span class="k">- scale presets (rows 6-7, steps 1-8)</span></p>
 <ul class="fl">
-  <li>16 preset slots. bright = active. press to switch. presets 1-7 = musical modes, 8-16 = chromatic.</li>
-  <li><span class="k">copy preset:</span> press destination, then hold scale (step 15) + press source.</li>
-  <li><span class="k">reset to factory:</span> hold scale (step 15) + press a preset slot.</li>
+  <li><span class="k">16 preset slots:</span> bright = active. press to switch. presets 1-8 = ionian/major, dorian, phrygian, lydian, mixolydian, aeolian/minor, locrian, chromatic. hold scale page button + preset to reset to default. presets 9-16 = chromatic. can be used for user presets.</li>
+  <li><span class="k">copy preset:</span> press source preset slot + press destination slot.</li>
+  <li><span class="k">reset to factory:</span> hold scale page button (step 15) + press a preset slot.</li>
 </ul>
 
 
@@ -406,11 +405,17 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-pat"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">row 1: 16 pattern slots · row 2: cue clock length · row 7: file ops + transport.</li>
-  <li><span class="k">row 1:</span> short press- load immediately. <span class="k">hold ~1s:</span> save to slot. <span class="k">hold ~3s:</span> save + write to flash.</li>
+  <li><span class="k">row 1:</span> 16 pattern slots. short press = load immediately. hold ~1s = save to slot. hold ~3s = save + write to flash.</li>
   <li><span class="k">cue pattern:</span> hold pattern page button (step 16) + press slot. loads when cue clock expires.</li>
   <li><span class="k">row 2:</span> manual cue clock length (1-16 steps). pattern loads after this many steps of the longest active loop.</li>
-  <li><span class="k">row 7: step 1:</span> load all from flash (hold ~2s - all saved slots flash on confirm). <span class="k">step 2:</span> clear mode - hold step 2 + pattern slot clears that slot and removes it from flash. <span class="k">step 3:</span> save all to flash (hold ~2s). <span class="k">step 15:</span> play/stop. <span class="k">step 16:</span> reset.</li>
+</ul>
+<br></br>
+<p class="desc" style="margin-top:12px"><span class="k">- load all / clear/ save all: row 7</span></p>
+<ul class="fl">
+  <li><span class="k">load all from flash:</span> hold step 1 for ~2s - all saved slots flash on confirm.</li>
+  <li><span class="k">clear mode:</span> hold step 2 + pattern slot - clears that slot and removes it from flash.</li>
+  <li><span class="k">save all patterns:</span> save all to flash (hold ~2s).</li>
+  <li><span class="k">play/stop:</span> press step 15 to start/stop transport. reset: press step 16 to reset all playheads.</li>
 </ul>
 </div>
 
@@ -420,19 +425,20 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="pn">hold step 6 - row 7</p>
 <div id="g-time"></div>
 
-<p class="desc">- internal clock:</p>
+<p class="desc"><span class="k">- internal clock:</span></p>
 <ul class="fl">
-  <li><span class="k">row 2 (rough bpm):</span> steps 1-7 = 30-120 bpm in 15 bpm steps · steps 8-16 = 140-300 bpm in 20 bpm steps. step 7 = default (120 bpm).</li>
-  <li><span class="k">row 3 (fine):</span> +0 to +15 bpm offset. step 1 = default (+0).</li>
-  <li><span class="k">row 4 steps 7-10:</span> hold to nudge tempo. step 7 = -4, step 8 = -1, step 9 = +1, step 10 = +4 bpm.</li>
+  <li><span class="k">rough bpm:</span> row 2, steps 1-7 = 30-120 bpm in 15 bpm steps · steps 8-16 = 140-300 bpm in 20 bpm steps. step 7 = default (120 bpm).</li>
+  <li><span class="k">fine:</span> row 3, step 1 = default (+0). every step is +1 bpm offset up to step 16 (+15).</li>
+  <li><span class="k">hold to nudge tempo:</span> row 4 - step 7 = -4, step 8 = -1, step 9 = +1, step 10 = +4 bpm.</li>
 </ul>
 <table class="dt">
-<tr><th>step</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr>
-<tr><td>bpm</td><td>30</td><td>45</td><td>60</td><td>75</td><td>90</td><td>105</td><td class="k">120</td><td>140</td><td>160</td><td>180</td><td>200</td><td>220</td><td>240</td><td>260</td><td>280</td><td>300</td></tr>
+<tr><th><span class="k">step</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr>
+<tr><td><span class="k">bpm</span></td><td>30</td><td>45</td><td>60</td><td>75</td><td>90</td><td>105</td><td class="k">120</td><td>140</td><td>160</td><td>180</td><td>200</td><td>220</td><td>240</td><td>260</td><td>280</td><td>300</td></tr>
 </table>
-<p class="desc" style="margin-top:12px">- external midi clock</p>
+<br></br>
+<p class="desc" style="margin-top:12px"><span class="k">- external midi clock:</span></p>
 <ul class="fl">
-  <li>detected automatically. row 2 shows incoming bpm (read-only). row 3 steps 6-11: step resolution (8th notes → 16th triplets, default = 16th notes at step 8).</li>
+  <li>detected automatically. row 2 shows incoming bpm. row 3 steps 6-11: step resolution (8th notes to 32nd triplets, default = 16th notes at step 8).</li>
 </ul>
 </div>
 
@@ -443,60 +449,52 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-cfg"></div>
 <ul class="fl">
   <li><span class="k">note sync (square icon):</span> on = pressing a step on the note, octave, duration, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.</li>
+  <li><span class="k">loop sync - track (step 12, row 3):</span> sets loop brace on one track at a time.</li>
   <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a new loop arms a pending snap instead of applying immediately. the snap fires when any running track whose loop length is at least as long as the new loop completes a cycle. pending snap endpoints blink in the loop mod view. turning on loop snap disables loop sync all. default = off.</li>
-  <li><span class="k">loop sync - track (step 12, row 3):</span> when setting a track's trigger loop, the alt-note loop for that track follows automatically.</li>
   <li><span class="k">loop sync - all (steps 11-14, row 6):</span> all four tracks share loop points. turning on loop sync all disables loop snap. default = on.</li>
 </ul>
-<p class="desc" style="margin-top:12px">note: kria_iii syncs two loop layers per track (trigger and alt note). the original kria supports independent loops per parameter.</p>
+<p class="desc" style="margin-top:12px">note: kria_iii syncs only two loop layers per track (trigger and alt note). the original kria supports independent loops per parameter.</p>
 </div>
 
 <!-- ─── GESTURES ──────────────────────────────────────── -->
 <div class="ps" id="gestures">
 <h2>gestures</h2>
 <table class="dt">
-<tr><th>action</th><th>gesture</th></tr>
+<tr><th><span class="k">action</span></th><th><span class="k">gesture</span></th></tr>
 <tr><td class="k">copy page data to another track</td><td>hold source track + press destination</td></tr>
 <tr><td class="k">clear page data for track</td><td>hold track button ~2s</td></tr>
 <tr><td class="k">toggle mute</td><td>hold loop mod (step 11) + press track</td></tr>
-<tr><td class="k">open sub-page (ratchet / alt note / velocity)</td><td>press step 6, 7, or 8 again</td></tr>
-<tr><td class="k">toggle sharp root note</td><td>press same root key twice - scale page</td></tr>
-<tr><td class="k">sharp root shortcut</td><td>hold step 16 + press root key - scale page</td></tr>
-<tr><td class="k">stretch interval, compensate adjacent</td><td>hold scale (step 15) + press interval - scale page</td></tr>
-<tr><td class="k">micro-adjust scale degree</td><td>press same interval twice - scale page</td></tr>
-<tr><td class="k">reset preset to factory</td><td>hold scale (step 15) + press preset - scale page</td></tr>
-<tr><td class="k">copy preset</td><td>press destination, then hold scale (step 15) + press source - scale page</td></tr>
-<tr><td class="k">cue pattern</td><td>hold pattern (step 16) + press slot - pattern page</td></tr>
+<tr><td class="k">toggle sharp root note*</td><td>press same root key twice</td></tr>
+<tr><td class="k">sharp root shortcut*</td><td>hold step 16 + press root key</td></tr>
+<tr><td class="k">stretch interval, compensate adjacent*</td><td>hold scale page (step 15, nav row) + press interval</td></tr>
+<tr><td class="k">adjust scale degree*</td><td>hold interval step + press another step in the same row</td></tr>
+<tr><td class="k">reset preset to factory*</td><td>hold scale page (step 15, nav row) + press preset</td></tr>
+<tr><td class="k">copy preset*</td><td>press source preset slot + press destination slot</td></tr>
 </table>
+<p class="desc" style="margin-top:8px">* scale page</p>
 </div>
 
 <!-- ─── DEFAULTS ──────────────────────────────────────── -->
 <div class="ps" id="defaults">
 <h2>defaults</h2>
 <table class="dt">
-<tr><th>setting</th><th>default</th></tr>
-<tr><td>triggers</td><td>none</td></tr>
+<tr><th><span class="k">setting</span></th><th><span class="k">default</span></th></tr>
 <tr><td>trigger loop</td><td>steps 1-6</td></tr>
-<tr><td>clock division</td><td>1x</td></tr>
-<tr><td>direction</td><td>forward</td></tr>
-<tr><td>note</td><td>degree 1 (root) on all steps</td></tr>
+<tr><td>scale</td><td>ionian (preset 1), root C</td></tr>
 <tr><td>octave global</td><td>step 3 (0 offset)</td></tr>
-<tr><td>octave per-step</td><td>row 5 (0 offset)</td></tr>
-<tr><td>duration global</td><td>step 9</td></tr>
-<tr><td>duration per-step</td><td>row 2 (shortest)</td></tr>
 <tr><td>velocity</td><td>row 2 (112) on all steps</td></tr>
 <tr><td>probability</td><td>row 1 (100%) on all steps</td></tr>
-<tr><td>alt note</td><td>degree 0 (unison) on all steps</td></tr>
-<tr><td>ratchet</td><td>1 subdivision, slot 1 enabled</td></tr>
 <tr><td>tempo</td><td>120 bpm</td></tr>
+<tr><td>clock division</td><td>1x</td></tr>
+<tr><td>direction</td><td>forward</td></tr>
 <tr><td>midi channels</td><td>track 1-4 = ch 1-4</td></tr>
-<tr><td>scale</td><td>ionian (preset 1), root C</td></tr>
 <tr><td>note sync</td><td>on</td></tr>
 <tr><td>loop snap</td><td>off</td></tr>
 <tr><td>loop sync</td><td>all</td></tr>
 </table>
 </div>
 
-<p class="footer">kria iii — v1.4.0</p>
+<p class="footer"><span class="k">kria iii - v1.4.0</span></p>
 </div>
 </body>
 </html>
