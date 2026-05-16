@@ -6,7 +6,7 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 
 ## files
 
-- **kria_iii.lua** — the script to upload to iii
+- **kria_iii.lua** — 
 - **kria_iii_manual.html** — open in a browser for the full manual
    https://aktsom.github.io/kria_iii/kria_iii_manual.html
 
@@ -42,7 +42,8 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 
 ## usage
 
-upload `kria_iii.lua` via the iii web interface. See `kria_iii_manual.html` for full documentation.
+upload `kria_iii.lua` via the iii web interface. https://dessertplanet.github.io/web-diii/
+ See `kria_iii_manual.html` for full documentation.
 
 ## version
 
