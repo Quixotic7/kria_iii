@@ -6,7 +6,7 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 
 ## files
 
-- **kria_iii.lua** — 
+- **kria_iii.lua** 
 - **kria_iii_manual.html** — open in a browser for the full manual
    https://aktsom.github.io/kria_iii/kria_iii_manual.html
 
