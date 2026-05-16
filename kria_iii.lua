@@ -165,10 +165,11 @@ local d2=sdir[t] or 1
 if (d2==2 and ph[t]==le[t]) or (d2~=2 and ph[t]==ls[t]) then
 lc[t]=(lc[t]+1)%4
 local tlen=llen(t)
+local mlen=0 for i=1,4 do local ll=llen(i) if ll>mlen then mlen=ll end end
 for tt=1,4 do
 if psnap[tt] then
 local slen=(psnap[tt][2]-psnap[tt][1]+STEPS)%STEPS+1
-if tlen>=slen then
+if tlen>=slen or tlen>=mlen then
 ls[tt]=psnap[tt][1] le[tt]=psnap[tt][2] ph[tt]=ls[tt] psnap[tt]=nil
 end
 end
@@ -822,13 +823,14 @@ local nm=vm==2 or vm==12
 if lft==nil then
 if lsnap and not nm then lsave_ls[t]=ls[t] lsave_le[t]=le[t] end
 lft=t lfc=x
-if nm then als[t]=x ale[t]=x else ls[t]=x le[t]=x end
+if nm then als[t]=x ale[t]=x elseif not lsnap then ls[t]=x le[t]=x end
 else
 local lf=lft
 local snapped=false
 if lsnap and not nm then
 snapped=true psnap[lf]={lfc,x}
 ls[lf]=lsave_ls[lf] le[lf]=lsave_le[lf]
+lft=nil lfc=nil
 end
 if not snapped then
 if nm then als[lf]=lfc ale[lf]=x
