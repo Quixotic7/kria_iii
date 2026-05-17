@@ -164,16 +164,8 @@ ph[t]=nxs(t) adva(t)
 local d2=sdir[t] or 1
 if (d2==2 and ph[t]==le[t]) or (d2~=2 and ph[t]==ls[t]) then
 lc[t]=(lc[t]+1)%4
-local tlen=llen(t)
-local mlen=0 for i=1,4 do local ll=llen(i) if ll>mlen then mlen=ll end end
-for tt=1,4 do
-if psnap[tt] then
-local slen=(psnap[tt][2]-psnap[tt][1]+STEPS)%STEPS+1
-if tlen>=slen or tlen>=mlen then
-ls[tt]=psnap[tt][1] le[tt]=psnap[tt][2] ph[tt]=ls[tt] psnap[tt]=nil
-end
-end
-end
+local tl=llen(t) local ml=0 for i=1,4 do local l=llen(i) if l>ml then ml=l end end
+for tt=1,4 do if psnap[tt] then local sl=(psnap[tt][2]-psnap[tt][1]+STEPS)%STEPS+1 if tl>=sl or tl>=ml then ls[tt]=psnap[tt][1] le[tt]=psnap[tt][2] ph[tt]=psnap[tt][1] psnap[tt]=nil end end end
 end
 end
 if mute[t] then sof(t) return true end
@@ -606,9 +598,9 @@ elseif x==cclk then b=4
 elseif x<=cclk then b=1 end
 gl(x,2,b)
 end
-gl(1,7,fldfl and BF or D)
+gl(1,7,D)
 gl(2,7,pclh and H or 1)
-gl(3,7,fsafl and BF or D)
+gl(3,7,D)
 gl(6,7,D) gl(7,7,D)
 gl(15,7,tr2 and BF or D)
 gl(16,7,D)
@@ -662,10 +654,7 @@ end
 if lft==t and lfc==s then b=BF end
 gl(s,t,b)
 end
-if psnap[t] then
-gl(psnap[t][1],t,blk and D or F)
-gl(psnap[t][2],t,blk and D or F)
-end
+if psnap[t] then local b=blk and D or F gl(psnap[t][1],t,b) gl(psnap[t][2],t,b) end
 end
 end
 function dtm()
@@ -821,16 +810,13 @@ local t=y
 if z==1 then
 local nm=vm==2 or vm==12
 if lft==nil then
-if lsnap and not nm then lsave_ls[t]=ls[t] lsave_le[t]=le[t] end
 lft=t lfc=x
 if nm then als[t]=x ale[t]=x elseif not lsnap then ls[t]=x le[t]=x end
 else
 local lf=lft
 local snapped=false
 if lsnap and not nm then
-snapped=true psnap[lf]={lfc,x}
-ls[lf]=lsave_ls[lf] le[lf]=lsave_le[lf]
-lft=nil lfc=nil
+snapped=true psnap[lf]={lfc,x} lft=nil lfc=nil
 end
 if not snapped then
 if nm then als[lf]=lfc ale[lf]=x
@@ -847,7 +833,7 @@ else if lsyn==1 or nsyn then Q1[ref]=P1[ref] Q2[ref]=P2[ref] end end
 end
 end
 else
-if lft==t and lfc==x then lft=nil lfc=nil end
+if lft==t and lfc==x then if lsnap and vm~=2 and vm~=12 then psnap[lft]={x,x} end lft=nil lfc=nil end
 end
 rd()
 end
@@ -996,23 +982,13 @@ ldp(x) rd()
 end
 phl=nil
 end
-if fsh and vm==7 and y==1 then
-if get_time()-fsh[1]>=3.0 then
-fsave(fsh[2])
-pflx=fsh[2] pflash=12 rd()
-end
-fsh=nil
-end
 if vm==7 and y==7 and x==1 and fld then
-fld=nil fldfl=false shm:stop() rd()
+fld=nil shm:stop() rd()
 end
 if vm==7 and y==7 and x==2 then
 pclh=false rd()
 end
-if vm==7 and y==7 and x==3 and fsa then
-if fsafl then fsaveall() rd() end
-fsa=nil fsafl=false shm:stop()
-end
+if vm==7 and y==7 and x==3 then fsa=nil shm:stop() end
 return
 end
 if vm==1 then
@@ -1113,16 +1089,16 @@ rd()
 elseif pth then
 cued=x rd()
 else
-phl=x pht=get_time() shm:start(1.0)
+phl=x shm:start(1.0)
 end
 elseif y==2 and x>=1 and x<=16 then
 cclk=x cman=true rd()
 elseif y==7 and x==1 then
-fld=get_time() fldfl=false shm:stop() shm:start(2.0)
+fld=get_time() shm:stop() shm:start(2.0)
 elseif y==7 and x==2 then
 pclh=true rd()
 elseif y==7 and x==3 then
-fsa=get_time() fsafl=false shm:stop() shm:start(2.0)
+fsa=get_time() shm:stop() shm:start(2.0)
 elseif y==7 and x==15 then pts()
 elseif y==7 and x==16 then rts()
 end
@@ -1140,7 +1116,7 @@ prb={} rdv={} rsl={}
 an2={} ve={} aph={} als={} ale={} adv2={} adc={} addr={}
 tclk={false,false,false,false} nph={1,1,1,1}
 blk=false blk2=false bct=0 shphl=false
-lsnap=false psnap={} lsave_ls={} lsave_le={}
+lsnap=false psnap={}
 for t=1,4 do
 tr[t]={} no[t]={} oc[t]={} du[t]={} prb[t]={} rdv[t]={} rsl[t]={}
 an2[t]={} ve[t]={}
@@ -1154,7 +1130,7 @@ end
 end
 lc={0,0,0,0}
 ms=false tr2=false cp=0 pt={} PB=8 sp=6 cpls=false cbt=0
-thk=nil sch=nil cpt=nil clrt=nil fsh=nil fld=nil fsa=nil psi=false pclh=false
+thk=nil sch=nil cpt=nil clrt=nil fld=nil fsa=nil psi=false pclh=false
 nom={}
 for t=1,4 do
 local tc=t
@@ -1181,8 +1157,8 @@ icl=metro.init(function() if tka then tka() end end,.125)
 icl:stop()
 idl=metro.init(function() rd() end,0.25)
 idl:start()
-phl=nil pht=nil HT=0.8 kvm=0 shld=false scph=nil
-cued=nil cclk=16 ccc=0 cdc=0 clt=1 cman=false pth=false pflash=0 pflx=0 fldfl=false fsafl=false
+phl=nil HT=0.8 kvm=0 shld=false scph=nil
+cued=nil cclk=16 ccc=0 cdc=0 clt=1 cman=false pth=false pflash=0 pflx=0
 rchy=nil rchx=nil
 shm=metro.init(function()
 if thk then
@@ -1214,12 +1190,11 @@ clrt=nil shm:stop() rd()
 gl(t,8,BF) gr()
 elseif phl and vm==7 then
 local ok=pcall(svp,phl)
-if ok then ap=phl pflx=phl pflash=8 fsh={pht,phl} end
-phl=nil
-shm:stop() rd()
+if ok then ap=phl pflx=phl pflash=8 end
+shm:stop() phl=nil rd()
 elseif fld or fsa then
-if fld then fldfl=true fload() pflash=3 pflx=-1 rd() end
-if fsa then fsafl=true gl(3,7,BF) gr() end
+if fld then fload() pflash=3 pflx=-1 rd() end
+if fsa then fsaveall() pflash=8 pflx=-1 fsa=nil rd() end
 shm:stop()
 else shm:stop() end
 end,0.4)
