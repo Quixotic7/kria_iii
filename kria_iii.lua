@@ -9,7 +9,7 @@ SD={{2,2,1,2,2,2,1},{2,1,2,2,2,1,2},{1,2,2,2,1,2,2},{2,2,2,1,2,2,1},{2,2,1,2,2,1
 local _c={1,1,1,1,1,1,1} for i=8,16 do SD[i]=_c end
 SDF="2212221212221212221222221221221221221221221221222"
 function gSDR(s) local t={} for i=1,7 do local c=SDF:byte((s-1)*7+i) t[i]=c and c-48 or 1 end return t end
-F=0 D=3 M=7 H=11 BF=15
+F=0 D=5 M=9 H=13 BF=15
 ODR=5
 OR={[2]=36,[3]=24,[4]=12,[5]=0,[6]=-12,[7]=-24}
 GO={-24,-12,0,12,24,36,48,60}
@@ -393,11 +393,11 @@ for t=1,4 do
 local mu=mute[t] local sel=(t==at)
 for s=1,STEPS do
 local b
-if s==ph[t] and tr2 then b=mu and 7 or BF
+if s==ph[t] and tr2 then b=mu and 9 or BF
 elseif inl(t,s) then
-if tr[t][s] then b=mu and (sel and 5 or 2) or M
-else b=mu and (sel and 3 or 1) or (sel and D or 1) end
-else b=tr[t][s] and (mu and (sel and 2 or 1) or D) or F end
+if tr[t][s] then b=mu and (sel and 7 or 4) or (sel and 13 or M)
+else b=mu and (sel and 2 or 1) or (sel and D or 1) end
+else b=tr[t][s] and 2 or F end
 gl(s,t,b)
 end
 end
@@ -526,18 +526,18 @@ end
 function dsc()
 if sch then
 for x=1,16 do gl(x,sch,(x==TCH[sch]) and BF or D) end
-for t=1,4 do if t~=sch then gl(1,t,D) end end
+for t=1,4 do if t~=sch then gl(1,t,t==at and M or D) end end
 else
-for t=1,4 do gl(1,t,D) end
+for t=1,4 do gl(1,t,t==at and M or D) end
 end
 for t=1,4 do
 if t~=sch then
-gl(2,t,tclk[t] and BF or D)
-for c=4,8 do gl(c,t,(sdir[t]==c-3) and BF or D) end
+gl(2,t,tclk[t] and BF or (t==at and M or D))
+for c=4,8 do gl(c,t,(sdir[t]==c-3) and BF or (t==at and M or D)) end
 end
 end
-for i=1,8 do gl(i,6,(i==asd) and BF or D) end
-for i=1,8 do gl(i,7,(i+8==asd) and BF or D) end
+for i=1,8 do gl(i,6,(i==asd or scfl==i) and BF or D) end
+for i=1,8 do gl(i,7,(i+8==asd or scfl==i+8) and BF or D) end
 local ro=(sr-48)%12
 for i=1,7 do
 local o=WK[i] local c=8+i
@@ -583,7 +583,7 @@ function dpat()
 if pflash>0 then pflash=pflash-1 end
 for p=1,NP do
 local b
-if pflash>0 and (p==pflx or pflx==-1) then b=BF
+if pflash>0 then b=BF
 elseif p==ap then b=psx[p] and H or M
 elseif cued and p==cued then b=9
 elseif psx[p] then b=4 else b=1 end
@@ -641,15 +641,15 @@ local b local iep=(s==lw or s==lx) local iin
 if wr then iin=(s>lw or s<lx) else iin=(s>lw and s<lx) end
 local sph=nm and aph[t] or ph[t]
 local itr=tr[t][s]
-if tr2 and s==sph then b=mu and 7 or BF
+if tr2 and s==sph then b=mu and 9 or BF
 elseif iep then
-if mu then b=sel and 3 or 1
-else b=itr and (sel and M or D) or (sel and D or 1) end
+if mu then b=sel and (itr and 1 or 2) or 1
+else b=itr and (sel and 13 or M) or (sel and D or 1) end
 elseif iin then
-if itr then b=mu and (sel and 5 or 2) or (sel and M or D)
-else b=mu and (sel and 3 or 1) or (sel and D or 1) end
+if itr then b=mu and (sel and 7 or 4) or (sel and 13 or M)
+else b=mu and (sel and 2 or 1) or (sel and D or 1) end
 else
-b=itr and (mu and (sel and 2 or 1) or 1) or F
+b=itr and 1 or F
 end
 if lft==t and lfc==s then b=BF end
 gl(s,t,b)
@@ -700,13 +700,15 @@ end
 gr()
 end
 function pts()
-if not ms then
-if tr2 then tr2=false ano() stc() sid() midi_out(MCC)
+if tr2 then tr2=false ano() sid()
+if not ms then stc() midi_out(MCC) end
 for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) aph[t]=(sdir[t]==2 and ale[t] or als[t]) nph[t]=als[t] lc[t]=0 end
 else tr2=true cbt=0 cpls=false ccc=0
 for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=DV[dv2[t] or 1]-1 aph[t]=(sdir[t]==2 and ale[t] or als[t]) adc[t]=0 nph[t]=als[t] lc[t]=0 end
-pld=true ucpd() sic() eid() midi_out(MCA) end
-rd() end
+pld=true eid()
+if not ms then ucpd() sic() midi_out(MCA) end
+end
+rd()
 end
 function rts()
 ccc=0
@@ -736,9 +738,8 @@ if x==13 then mph=(z==1) rd() return end
 if x==15 then
 if z==1 then
 ublk()
-if vm~=6 then vm=6 end
-shld=true
-else shld=false end
+if vm~=6 then pvm=vm vm=6 else vm=pvm end
+end
 rd() return
 end
 if x==16 then
@@ -811,7 +812,8 @@ if z==1 then
 local nm=vm==2 or vm==12
 if lft==nil then
 lft=t lfc=x
-if nm then als[t]=x ale[t]=x elseif not lsnap then ls[t]=x le[t]=x end
+if nm then if lsyn==2 then for tt=1,4 do als[tt]=x ale[tt]=x end else als[t]=x ale[t]=x end
+elseif not lsnap then if lsyn==2 then for tt=1,4 do ls[tt]=x le[tt]=x end else ls[t]=x le[t]=x end end
 else
 local lf=lft
 local snapped=false
@@ -1037,15 +1039,15 @@ elseif y>=1 and y<=4 and x==2 and not sch then
 tclk[y]=not tclk[y] nph[y]=als[y] rd()
 elseif (y==6 or y==7) and x>=1 and x<=8 then
 local slot=y==6 and x or x+8
-if shld then
+if shphl then
 SD[slot]=gSDR(slot)
 if asd==slot then si={tu(SD[slot])} crs() end
 elseif scph then
 local src=scph[1]==6 and scph[2] or scph[2]+8
 SD[slot]={tu(SD[src])}
 if asd==slot then si={tu(SD[slot])} crs() end
+scfl=slot scph=nil shm:stop() shm:start(0.4)
 shk=nil bsc() rd()
-gl(x,y,BF) gr()
 return
 else
 SD[asd]={tu(si)}
@@ -1072,7 +1074,7 @@ local nv=x-9
 if shk and shk[1]==y then
 sadj[ni]=nv-si[idx]
 bsc() rd()
-elseif shld and idx<6 then
+elseif shphl and idx<6 then
 local d=nv-si[idx] si[idx]=nv si[idx+1]=mx(si[idx+1]-d,0)
 sadj[ni]=0 SD[asd]={tu(si)} bsc() rd()
 else
@@ -1157,7 +1159,7 @@ icl=metro.init(function() if tka then tka() end end,.125)
 icl:stop()
 idl=metro.init(function() rd() end,0.25)
 idl:start()
-phl=nil HT=0.8 kvm=0 shld=false scph=nil
+phl=nil HT=0.8 kvm=0 scph=nil pvm=1 scfl=nil
 cued=nil cclk=16 ccc=0 cdc=0 clt=1 cman=false pth=false pflash=0 pflx=0
 rchy=nil rchx=nil
 shm=metro.init(function()
@@ -1190,12 +1192,13 @@ clrt=nil shm:stop() rd()
 gl(t,8,BF) gr()
 elseif phl and vm==7 then
 local ok=pcall(svp,phl)
-if ok then ap=phl pflx=phl pflash=8 end
+if ok then ap=phl pflx=phl pflash=3 end
 shm:stop() phl=nil rd()
 elseif fld or fsa then
 if fld then fload() pflash=3 pflx=-1 rd() end
-if fsa then fsaveall() pflash=8 pflx=-1 fsa=nil rd() end
+if fsa then fsaveall() pflash=3 pflx=-1 fsa=nil rd() end
 shm:stop()
+elseif scfl then scfl=nil shm:stop() rd()
 else shm:stop() end
 end,0.4)
 shm:stop()

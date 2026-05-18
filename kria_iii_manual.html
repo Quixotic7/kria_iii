@@ -383,7 +383,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="desc" style="margin-top:12px"><span class="k">- scale interval editor (rows 1-6, steps 9-16)</span></p>
 <ul class="fl">
   <li><span class="k">each row =</span> one scale interval (semitones between consecutive degrees). steps 9-16 = 0-7 semitones. bright = current value.</li>
-  <li><span class="k">hold scale page button (nav row, step 15) + press interval:</span> stretch mode - adjusts interval and compensates adjacent to preserve range.</li>
+  <li><span class="k">hold step 16 (row 7) + press interval:</span> stretch mode - adjusts interval and compensates adjacent to preserve range.</li>
   <li><span class="k">hold interval step + press another step in the same row:</span> adjust mode - shifts that degree's pitch without changing the preset.</li>
 </ul>
 <br></br>
@@ -395,9 +395,9 @@ window.addEventListener('DOMContentLoaded',function(){
 <br></br>
 <p class="desc" style="margin-top:12px"><span class="k">- scale presets (rows 6-7, steps 1-8)</span></p>
 <ul class="fl">
-  <li><span class="k">16 preset slots:</span> bright = active. press to switch. presets 1-8 = ionian/major, dorian, phrygian, lydian, mixolydian, aeolian/minor, locrian, chromatic. hold scale page button + preset to reset to default. presets 9-16 = chromatic. can be used for user presets.</li>
+  <li><span class="k">16 preset slots:</span> bright = active. press to switch. presets 1-8 = ionian/major, dorian, phrygian, lydian, mixolydian, aeolian/minor, locrian, chromatic. presets 9-16 = chromatic. can be used for user presets.</li>
   <li><span class="k">copy preset:</span> press source preset slot + press destination slot.</li>
-  <li><span class="k">reset to factory:</span> hold scale page button (step 15) + press a preset slot.</li>
+  <li><span class="k">reset to factory:</span> hold step 16 (row 7) + press a preset slot.</li>
 </ul>
 
 
@@ -472,9 +472,9 @@ window.addEventListener('DOMContentLoaded',function(){
 <tr><td class="k">toggle mute</td><td>hold loop mod (step 11) + press track</td></tr>
 <tr><td class="k">toggle sharp root note*</td><td>press same root key twice</td></tr>
 <tr><td class="k">sharp root shortcut*</td><td>hold step 16 + press root key</td></tr>
-<tr><td class="k">stretch interval, compensate adjacent*</td><td>hold scale page (step 15, nav row) + press interval</td></tr>
+<tr><td class="k">stretch interval, compensate adjacent*</td><td>hold step 16, row 7 + press interval</td></tr>
 <tr><td class="k">adjust scale degree*</td><td>hold interval step + press another step in the same row</td></tr>
-<tr><td class="k">reset preset to factory*</td><td>hold scale page (step 15, nav row) + press preset</td></tr>
+<tr><td class="k">reset preset to factory*</td><td>hold step 16, row 7 + press preset slot</td></tr>
 <tr><td class="k">copy preset*</td><td>press source preset slot + press destination slot</td></tr>
 </table>
 <p class="desc" style="margin-top:8px">* scale page</p>
