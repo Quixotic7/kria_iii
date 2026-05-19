@@ -99,8 +99,10 @@ end
 function son(t,s)
 if mute[t] then return end
 local mn=mnf(t,s)
-if an[t]>=0 then midi_note_off(an[t],0,TCH[t]) nom[t]:stop() end
+local prev=an[t] nom[t]:stop()
+if not tie and prev>=0 then midi_note_off(prev,0,TCH[t]) end
 midi_note_on(mn,VL[ve[t][s] or 6],TCH[t]) an[t]=mn nom[t]:start(nls(t,s))
+if tie and prev>=0 then midi_note_off(prev,0,TCH[t]) end
 end
 function sof(t)
 if an[t]>=0 then midi_note_off(an[t],0,TCH[t]) an[t]=-1 nom[t]:stop() end
@@ -269,6 +271,7 @@ n=n+1 b[n]=SC(tclk[1] and 1 or 0,tclk[2] and 1 or 0,tclk[3] and 1 or 0,tclk[4] a
 n=n+1 b[n]=SC(nsyn and 1 or 0,lsyn)
 n=n+1 b[n]=SC(lsnap and 1 or 0)
 for p=1,16 do local sp=SD[p] or {} for i=1,7 do n=n+1 b[n]=SC(sp[i] or 1) end end
+n=n+1 b[n]=SC(tie and 1 or 0)
 return table.concat(b)
 end
 function rst(d)
@@ -312,6 +315,7 @@ if #d>=637 then for t=1,4 do tclk[t]=B(d,633+t)==1 end end
 if #d>=639 then nsyn=B(d,638)==1 lsyn=B(d,639) end
 if #d>=640 then lsnap=B(d,640)==1 end
 if #d>=752 then for p=1,16 do SD[p]={} for i=1,7 do SD[p][i]=B(d,640+(p-1)*7+i) end end si={tu(SD[asd])} end
+if #d>=753 then tie=B(d,753)==1 end
 if asd<1 or asd>16 then asd=1 end
 bsc() crs() scph=nil shk=nil
 end
@@ -513,7 +517,7 @@ if itr then
 if rget(at,s,slot) then
 if iph then b=BF else b=H end
 else
-if iph then b=BF else b=M end
+if iph then b=BF else b=3 end
 end
 else b=F end
 else b=iph and 1 or F end
@@ -609,9 +613,11 @@ local nb=nsyn and H or D
 for r=3,6 do for c=2,5 do
 if r==3 or r==6 or c==2 or c==5 then gl(c,r,nb) end
 end end
+gl(7,7,blk and BF or D)
 gl(12,3,lsyn==1 and BF or D)
 gl(14,3,lsnap and BF or 1)
 for c=11,14 do gl(c,6,lsyn==2 and BF or D) end
+gl(9,8,tie and BF or D)
 end
 function dtim()
 local pb=cbt==0 and BF or D
@@ -678,7 +684,9 @@ if cfh then dcfg()
 elseif tmh then dtim()
 else
 dnav()
-if mlh then dlp()
+if mlh then
+if vm==12 and not nsyn and lsyn==0 then dano()
+else dlp() end
 elseif mth then dtm()
 elseif mph then dprb()
 elseif vm==11 then drch()
@@ -691,7 +699,8 @@ elseif vm==4 then ddu()
 elseif vm==6 then dsc()
 elseif vm==7 then dpat()
 end
-if mlh or mth or mph then
+if alpflash then for r=1,7 do gl(als[at],r,BF) gl(ale[at],r,BF) end end
+if (mlh or mth or mph) and not (mlh and vm==12 and not nsyn and lsyn==0) then
 gl(6,7,D) gl(7,7,D)
 gl(15,7,tr2 and BF or D) gl(16,7,D)
 end
@@ -794,17 +803,30 @@ if vm==3 then vm=13
 elseif vm==13 then vm=3 blk=false
 else ublk() vm=3 end
 elseif x==9 then
-ublk() vm=4
+if cfh then tie=not tie else ublk() vm=4 end
 end
 rd() return
 end
-if (mlh or mth or mph) and y==7 then
-if x==7 then cfh=(z==1) rd() return end
+if (mlh or mth or mph) and y==7 and not (mlh and vm==12 and not nsyn and lsyn==0) then
+if x==7 then if z==1 then cfh=not cfh end rd() return end
 if x==6 then tmh=(z==1) if not tmh then thk=nil shm:stop() end rd() return end
 if x==15 and z==1 then pts() return end
 if x==16 and z==1 then rts() return end
 end
 if mlh then
+if vm==12 and not nsyn and lsyn==0 then
+if z==1 and y>=1 and y<=7 and x>=1 and x<=STEPS then
+if lft==nil then
+lft=at lfc=x als[at]=x ale[at]=x
+else
+als[lft]=lfc ale[lft]=x
+if not ainl(lft,aph[lft]) then aph[lft]=lfc end
+lft=nil lfc=nil alpflash=true shm:stop() shm:start(0.4)
+end
+rd()
+end
+return
+end
 if y>=1 and y<=4 and x>=1 and x<=STEPS then
 local t=y
 if z==1 then
@@ -875,7 +897,6 @@ local nd=(rdv[at][x] or 1)-1
 if nd<1 then nd=1 end
 rdv[at][x]=nd
 rset(at,x,nd+1,false)
-if not rget(at,x,1) then rset(at,x,1,true) end
 end
 end
 rchy=nil rchx=nil rd()
@@ -894,9 +915,6 @@ rdv[at][x]=slot
 rset(at,x,slot,true)
 else
 rset(at,x,slot,not rget(at,x,slot))
-nd=rdv[at][x]
-while nd>1 and not rget(at,x,nd) do nd=nd-1 end
-rdv[at][x]=nd
 end
 rd()
 end
@@ -929,7 +947,7 @@ if y==7 and x==16 then shphl=false rd() end
 return
 end
 if y==7 and x==7 and (vm==1 or vm==7 or mlh or mth or mph or cfh) then
-cfh=(z==1)
+if z==1 then cfh=not cfh end
 rd() return
 end
 if y==7 and x==6 and (vm==1 or vm==7 or mlh or mth or mph or tmh) then
@@ -994,8 +1012,7 @@ end
 if vm==1 then
 if y>=1 and y<=4 and x>=1 and x<=STEPS then
 tr[y][x]=not tr[y][x]
-if tr[y][x] then no[y][x]=1
-else rdv[y][x]=1 rsl[y][x]=1 end
+if not tr[y][x] then rdv[y][x]=1 rsl[y][x]=1 end
 rd()
 elseif y==7 and x==15 then pts()
 elseif y==7 and x==16 then rts()
@@ -1043,7 +1060,7 @@ if asd==slot then si={tu(SD[slot])} crs() end
 elseif scph then
 local src=scph[1]==6 and scph[2] or scph[2]+8
 SD[slot]={tu(SD[src])}
-if asd==slot then si={tu(SD[slot])} crs() end
+asd=slot si={tu(SD[slot])} crs()
 scfl=slot scph=nil shm:stop() shm:start(0.4)
 shk=nil bsc() rd()
 return
@@ -1107,8 +1124,8 @@ end
 bsc()
 ap=1 pats={} psx={}
 vm=1 at=1
-nsyn=true lsyn=2
-mlh=false mth=false mph=false cfh=false tmh=false lfc=nil lft=nil
+nsyn=true lsyn=2 tie=false
+mlh=false mth=false mph=false cfh=false tmh=false lfc=nil lft=nil alpflash=false
 tr={} no={} oc={} du={} ph={} ls={} le={} dv2={} dc={} an={}
 go2={3,3,3,3} gdu={9,9,9,9} sdir={1,1,1,1} ddr={1,1,1,1}
 mute={false,false,false,false}
@@ -1197,6 +1214,7 @@ elseif fld or fsa then
 if fld then fload() pflash=3 rd() end
 if fsa then fsaveall() pflash=3 fsa=nil rd() end
 shm:stop()
+elseif alpflash then alpflash=false shm:stop() rd()
 elseif scfl then scfl=nil shm:stop() rd()
 else shm:stop() end
 end,0.4)

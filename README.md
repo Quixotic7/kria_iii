@@ -2,7 +2,7 @@
 
 4 track midi step sequencer for [monome grid](https://monome.org/docs/grid/) running on the [iii scripting environment](https://github.com/monome/iii).
 
-based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by monome, adapted for midi output with additional features.
+based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by monome, adapted for midi output with additional features. consider this a kria lite version
 
 ## files
 
@@ -22,12 +22,22 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - 16 pattern slots with flash persistence and quantized cueing
 - internal tempo control (30-300bpm) and external MIDI clock input
 - configurable MIDI channel per track, MIDI clock output
+- consider this a kria lite version. missing features are glide page, meta-patterns, per-parameter clock divisions, division cueing, division sync modes
+
+## what's new in v1.5.0
+
+* **note tie** - config toggle (step 9, row 8). when on, sends note-on before note-off on consecutive steps, triggering legato on connected instruments
+* **ratchet silent steps** - fully silent steps are now possible: clear all active slots to leave a step with no sub-triggers. rests display dimmer for cleaner visual distinction
+* **alt note independent loop** - when loop sync and note sync are both off, holding loop mod on the alt note page stays on the alt note page. press any two steps across rows 1–7 to set an independent loop brace for the alt note sequence
+* **config page toggle** - config page is now a toggle (press to open, press again to close). config button blinks when open
+* **trigger page note fix** - activating a trigger no longer resets that step's note value to the root
+* **scale copy auto-switch** - copying a scale preset to another slot now immediately switches to and applies the destination slot
 
 ## what's new in v1.4.1
 
-* **track clear expanded** - holding a track button on the trigger page now resets all parameters (notes, octave, note length, velocity, probability, ratchet) in addition to triggers. a full clean slate in one gesture
+* **track clear expanded** - holding a track button on the trigger page now resets all parameters (notes, octave, note length, velocity, probability, ratchet) in addition to triggers
 * **stability improvements** - removed dead code, cleaner render loop, reduced chance of occasional led flicker
-* **nav row muted indicator** - muted tracks now show as solid dim instead of blinking, consistent at any tempo
+* **nav row muted indicator** - muted tracks now show as solid dim instead of blinking
 * **trigger page playhead** - slightly improved contrast between active steps and the playhead
 * **manual** - duration page renamed to note length, time page renamed to tempo
 
@@ -55,4 +65,4 @@ upload `kria_iii.lua` via the iii web interface. https://dessertplanet.github.io
 
 ## version
 
-v1.4.1
+v1.5.0

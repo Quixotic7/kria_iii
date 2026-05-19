@@ -196,7 +196,7 @@ window.addEventListener('DOMContentLoaded',function(){
      [E,H,E,E,H,E,E,E,E,E,E,E,E,E,E,E],
      [E,H,E,E,H,E,E,E,E,E,E,E,E,E,E,E],
      [E,H,H,H,H,E,E,E,E,E,B,B,B,B,E,E],
-     [E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E]],
+     [E,E,E,E,E,E,D,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,D,E,E,E,E,E,E,E]],
     null);
 });
 </script>
@@ -204,7 +204,10 @@ window.addEventListener('DOMContentLoaded',function(){
 <body>
 <div class="container">
 <h1>kria iii</h1>
-<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.4.1<br>based on ansible kria by monome</span></p>
+<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.5.0</span><br>based on ansible kria by monome.
+<tr><td> consider this a kria lite version, with some expanded and added features</td></tr></p>
+
+<br>
 
 <!-- ─── NAVIGATION ───────────────────────────────────── -->
 <div class="ps" id="nav">
@@ -236,7 +239,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-trig"></div>
 <ul class="fl">
   <li><span class="k">rows 1-4, steps 1-16:</span> press to toggle triggers. </li>
-  <li><span class="k">play/stop (row 7, step 15):</span> toggles transport. disabled when external midi clock is active.</li>
+  <li><span class="k">play/stop (row 7, step 15):</span> toggles transport. when external MIDI clock is connected, timing is driven by the external device - the button still starts/stops the sequencer but does not send MIDI clock messages.</li>
   <li><span class="k">reset (row 7, step 16):</span> all playheads to loop start. if running, immediately plays step 1.</li>
 </ul>
 </div>
@@ -275,10 +278,28 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-nlen"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">row 1, steps 1-16:</span> global duration multiplier for the active track. step 1 = very short. step 9 = default (~1 step). step 16 = whole note.</li>
-  <li><span class="k">rows 2-7:</span> per-step note length. row 2 = shortest (staccato). row 7 = 100% of step length.</li>
+  <li><span class="k">row 1, steps 1-16:</span> global note length multiplier for the track - sets how long each note sustains relative to one step. at ×1 (step 9, default) a note ends just as the next step fires. below ×1 = staccato. above ×1 = notes sustain into following steps.</li>
 </ul>
+<table class="dt">
+<tr><th><span class="k">step</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr>
+<tr><td><span class="k">length</span></td><td>×1/16</td><td>×1/8</td><td>×3/16</td><td>×1/4</td><td>×3/8</td><td>×1/2</td><td>×5/8</td><td>×3/4</td><td class="k">×1</td><td>×2</td><td>×3</td><td>×4</td><td>×6</td><td>×8</td><td>×12</td><td>×16</td></tr>
+</table>
+<ul class="fl">
+  <li><span class="k">rows 2-7:</span> per-step note length - scales each step individually as a fraction of the global setting. row 7 = 100% (full global length). row 2 = 10% (very short). steps without a value set default to 10%.</li>
+</ul>
+<table class="dt">
+<tr><th><span class="k">row</span></th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
+<tr><td><span class="k">fraction</span></td><td>10%</td><td>20%</td><td>40%</td><td>60%</td><td>80%</td><td class="k">100%</td></tr>
+</table>
 </div>
+<p><span class="k">finding the right adsr settings on your synth can be a bit tricky so here is a starting point.</span></p> 
+<p>attack: very short (1-5ms)</p>
+<p>decay: short to medium (50-200ms)</p>
+<p>sustain: 0 or low (this is usually not where i end up, but good for a starting point after setting decay and release first. then add sustain till you are happy</p>
+<p>release: short (50-100ms)   </p>
+<br>
+<br>
+
 
 <!-- ─── VELOCITY ──────────────────────────────────────── -->
 <div class="ps" id="vel">
@@ -300,7 +321,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-ratch"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">rows 2-6:</span> toggle ratchet slots on/off. lit = fires. dim = rest. pressing a slot above the current count extends the count to include it.</li>
+  <li><span class="k">rows 2-6:</span> toggle ratchet slots on/off. lit = fires. dim = rest. pressing a slot above the current count extends the count to include it. clear all active slots to make a fully silent step.</li>
   <li><span class="k">row 1 tap:</span> +1 subdivision (max 5). <span class="k">row 1 hold:</span> fill all steps to max.</li>
   <li><span class="k">row 7 tap:</span> -1 subdivision (min 1). <span class="k">row 7 hold:</span> reset step to 1 subdivision.</li>
 </ul>
@@ -314,7 +335,8 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-alt"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">rows 1-7:</span> set degree offset for that step. row 7 = unison (no change). the alt note loop is shown and edited in the loop mod when on this page.</li>
+  <li><span class="k">rows 1-7:</span> set degree offset for that step. row 7 = unison (no change).</li>
+  <li>the alt note loop is shown and edited in the loop mod when on this page. with loop sync and note sync both off, holding loop mod stays on the alt note page - press any two steps across rows 1-7 to set the loop brace directly.</li>
 </ul>
 </div>
 
@@ -327,6 +349,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <ul class="fl">
   <li><span class="k">setting a loop:</span> first press = loop start, second press = loop end. loops can wrap around step 16 to step 3 for example.</li>
   <li>on <span class="k">note or alt note page:</span> shows and edits the alt-note loop. all other pages: shows the trigger loop.</li>
+  <li>on <span class="k">alt note page</span> with loop sync and note sync both off: stays on the alt note page - press any two steps across rows 1-7 to set the alt note loop brace in place. a brief flash confirms the new brace.</li>
   <li>any track's loop can be edited, not just the active track.</li>
   <li><span class="k">mute:</span> while holding loop mod, press a track button to toggle mute.</li>
 </ul>
@@ -355,14 +378,14 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-prob"></div>
 <table class="dt">
 <tr><th><span class="k">row</span></th><th><span class="k">probability</span></th><th><span class="k">pattern (4-loop cycle)</span></th></tr>
-<tr><td class="k">1</td><td class="k">100% — always (default)</td><td>fires every loop</td></tr>
+<tr><td class="k">1</td><td class="k">100% - always (default)</td><td>fires every loop</td></tr>
 <tr><td>2</td><td>75%</td><td>fires loops 1-3, silent loop 4</td></tr>
 <tr><td>3</td><td>50%</td><td>fires loop 1, silent 2, fires 3, silent 4</td></tr>
 <tr><td>4</td><td>25%</td><td>fires loop 1, silent loops 2-4</td></tr>
-<tr><td>5</td><td>0% — never fires</td><td>always silent</td></tr>
+<tr><td>5</td><td>0% - never fires</td><td>always silent</td></tr>
 </table>
 <ul class="fl">
-  <li>the cycle resets when transport starts. loop length does not affect the cycle — it counts completed track loops regardless of step count.</li>
+  <li>the cycle resets when transport starts. loop length does not affect the cycle - it counts completed track loops regardless of step count.</li>
 </ul>
 </div>
 
@@ -396,7 +419,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="desc" style="margin-top:12px"><span class="k">- scale presets (rows 6-7, steps 1-8)</span></p>
 <ul class="fl">
   <li><span class="k">16 preset slots:</span> bright = active. press to switch. presets 1-8 = ionian/major, dorian, phrygian, lydian, mixolydian, aeolian/minor, locrian, chromatic. presets 9-16 = chromatic. can be used for user presets.</li>
-  <li><span class="k">copy preset:</span> press source preset slot + press destination slot.</li>
+  <li><span class="k">copy preset:</span> press source preset slot + press destination slot. switches to and applies the destination slot immediately.</li>
   <li><span class="k">reset to factory:</span> hold step 16 (row 7) + press a preset slot.</li>
 </ul>
 
@@ -451,13 +474,14 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ─── CONFIG PAGE ───────────────────────────────────── -->
 <div class="ps" id="cfg">
 <h2>config page</h2>
-<p class="pn">hold step 7 - row 7</p>
+<p class="pn">step 7 - row 7 — press to open, press again to close. button blinks when open.</p>
 <div id="g-cfg"></div>
 <ul class="fl">
   <li><span class="k">note sync (square icon):</span> on = pressing a step on the note, octave, note length, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.</li>
   <li><span class="k">loop sync - track (step 12, row 3):</span> sets loop brace on one track at a time.</li>
-  <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a loop brace arms a pending snap instead of applying immediately. the snap fires when a running track completes a cycle whose loop is at least as long as the new loop — longer snaps wait for a bigger boundary. to set a multi-step snap: hold the first step and press the second. to set a 1-step snap: tap a single step (press and release). pending snap endpoints blink in the loop mod view. turning on loop snap disables loop sync all. default = off.</li>
+  <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a loop brace arms a pending snap instead of applying immediately. the snap fires when a running track completes a cycle whose loop is at least as long as the new loop - longer snaps wait for a bigger boundary. to set a multi-step snap: hold the first step and press the second. to set a 1-step snap: tap a single step (press and release). pending snap endpoints blink in the loop mod view. turning on loop snap disables loop sync all. default = off.</li>
   <li><span class="k">loop sync - all (steps 11-14, row 6):</span> all four tracks share loop points. turning on loop sync all disables loop snap. default = on.</li>
+  <li><span class="k">note tie (step 9, row 8):</span> when on, sends note-on before note-off on consecutive steps, enabling legato on connected instruments. default = off.</li>
 </ul>
 <p class="desc" style="margin-top:12px">note: kria_iii syncs only two loop layers per track (trigger and alt note). the original kria supports independent loops per parameter.</p>
 </div>
@@ -497,10 +521,31 @@ window.addEventListener('DOMContentLoaded',function(){
 <tr><td>note sync</td><td>on</td></tr>
 <tr><td>loop snap</td><td>off</td></tr>
 <tr><td>loop sync</td><td>all</td></tr>
+<tr><td>note tie</td><td>off</td></tr>
 </table>
 </div>
 
-<p class="footer"><span class="k">kria iii - v1.4.1</span></p>
+
+
+<!-- ─── DEFAULTS ──────────────────────────────────────── -->
+<div class="ps" id="defaults">
+<h2>missing from ansible kria</h2>
+<table class="dt">
+<tr><td>glide page</td></tr>
+<tr><td>meta-patterns</td></tr>
+<tr><td>per-parameter clock divisions</td></tr>
+<tr><td>division cueing</td></tr>
+<tr><td>division sync modes </td></tr>
+</table>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<p class="footer"><span class="k">kria iii - v1.5.0</span></p>
 </div>
 </body>
 </html>
