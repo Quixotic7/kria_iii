@@ -1,4 +1,4 @@
--- kria iii v1.4.0
+-- kria iii v1.4.1
 collectgarbage("collect")
 STEPS=16 PPQN=24
 tro=6 tfi=0 cpd=0.125
@@ -366,11 +366,10 @@ cg("collect")
 end
 end
 function dnav()
-for x=1,16 do gl(x,8,F) end
 for t=1,4 do
 local b
-if t==at then b=mute[t] and (blk2 and 10 or F) or BF
-else b=mute[t] and (blk2 and 1 or F) or 5 end
+if t==at then b=mute[t] and M or BF
+else b=mute[t] and 1 or 5 end
 gl(t,8,b)
 end
 for i=1,4 do
@@ -395,7 +394,7 @@ for s=1,STEPS do
 local b
 if s==ph[t] and tr2 then b=mu and 9 or BF
 elseif inl(t,s) then
-if tr[t][s] then b=mu and (sel and 7 or 4) or (sel and 13 or M)
+if tr[t][s] then b=mu and (sel and 7 or 4) or (sel and 12 or M)
 else b=mu and (sel and 2 or 1) or (sel and D or 1) end
 else b=tr[t][s] and 2 or F end
 gl(s,t,b)
@@ -673,7 +672,7 @@ function rd()
 cg("step",1)
 bct=bct+1
 if bct==2 then blk=not blk end
-if bct>=4 then bct=0 blk2=not blk2 end
+if bct>=4 then bct=0 end
 grid_led_all(F)
 if cfh then dcfg()
 elseif tmh then dtim()
@@ -923,7 +922,6 @@ rd()
 end
 return
 end
-if z==1 then kvm=vm end
 if vm==6 and z==0 then
 if shk and shk[1]==y and shk[2]==x then shk=nil end
 if scph and scph[1]==y and scph[2]==x then scph=nil end
@@ -1117,7 +1115,7 @@ mute={false,false,false,false}
 prb={} rdv={} rsl={}
 an2={} ve={} aph={} als={} ale={} adv2={} adc={} addr={}
 tclk={false,false,false,false} nph={1,1,1,1}
-blk=false blk2=false bct=0 shphl=false
+blk=false bct=0 shphl=false
 lsnap=false psnap={}
 for t=1,4 do
 tr[t]={} no[t]={} oc[t]={} du[t]={} prb[t]={} rdv[t]={} rsl[t]={}
@@ -1159,8 +1157,8 @@ icl=metro.init(function() if tka then tka() end end,.125)
 icl:stop()
 idl=metro.init(function() rd() end,0.25)
 idl:start()
-phl=nil HT=0.8 kvm=0 scph=nil pvm=1 scfl=nil
-cued=nil cclk=16 ccc=0 cdc=0 clt=1 cman=false pth=false pflash=0 pflx=0
+phl=nil HT=0.8 scph=nil pvm=1 scfl=nil
+cued=nil cclk=16 ccc=0 cdc=0 clt=1 cman=false pth=false pflash=0
 rchy=nil rchx=nil
 shm=metro.init(function()
 if thk then
@@ -1178,7 +1176,8 @@ rchy=nil rchx=nil shm:stop() rd()
 elseif clrt then
 local t=clrt
 if vm==1 or vm==11 then
-for s=1,STEPS do tr[t][s]=false end
+for s=1,STEPS do tr[t][s]=false no[t][s]=1 oc[t][s]=ODR du[t][s]=0 prb[t][s]=5 rdv[t][s]=1 rsl[t][s]=1 an2[t][s]=0 ve[t][s]=6 end
+go2[t]=3 gdu[t]=9
 elseif vm==2 or vm==12 then
 for s=1,STEPS do no[t][s]=1 tr[t][s]=false end
 elseif vm==3 then
@@ -1192,11 +1191,11 @@ clrt=nil shm:stop() rd()
 gl(t,8,BF) gr()
 elseif phl and vm==7 then
 local ok=pcall(svp,phl)
-if ok then ap=phl pflx=phl pflash=3 end
+if ok then ap=phl pflash=3 end
 shm:stop() phl=nil rd()
 elseif fld or fsa then
-if fld then fload() pflash=3 pflx=-1 rd() end
-if fsa then fsaveall() pflash=3 pflx=-1 fsa=nil rd() end
+if fld then fload() pflash=3 rd() end
+if fsa then fsaveall() pflash=3 fsa=nil rd() end
 shm:stop()
 elseif scfl then scfl=nil shm:stop() rd()
 else shm:stop() end

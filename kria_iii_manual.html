@@ -46,11 +46,11 @@ window.addEventListener('DOMContentLoaded',function(){
 
   // navigation row
   G('g-nav',
-    [[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],
+    [[H,H,H,H,H,H,E,E,E,E,E,E,E,E,E,E],[D,D,D,D,D,D,E,E,E,E,E,E,E,E,E,E],
+     [D,D,D,D,D,D,E,E,E,E,E,E,E,E,E,E],[D,D,D,D,D,D,E,E,E,E,E,E,E,E,E,E],
      [E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],
-     [E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],
-     [E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],[B,5,5,5,E,B,D,D,D,E,D,D,D,E,D,D]],
-    ['1','2','3','4','','trig','note','oct','dur','','loop','div','prob','','scale','pat']);
+     [E,E,E,E,E,D,D,E,E,E,E,E,E,E,D,D],[B,5,5,5,E,B,D,D,D,E,D,D,D,E,D,D]],
+    ['1','2','3','4','','trig','note','oct','len','','loop','div','prob','','scale','pat']);
 
   // trigger page
   G('g-trig',
@@ -84,8 +84,8 @@ window.addEventListener('DOMContentLoaded',function(){
      [H,E,E,E,E,H,E,E,E,E,E,E,E,E,H,E],[B,5,5,5,E,D,D,B,D,E,D,D,D,E,D,D]],
     null);
 
-  // duration page
-  G('g-dur',
+  // note length page
+  G('g-nlen',
     [[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,B],
      [E,D,E,D,E,D,E,D,E,E,E,E,E,E,E,E],
      [E,D,E,D,E,D,E,D,E,E,E,E,E,E,E,E],
@@ -179,8 +179,8 @@ window.addEventListener('DOMContentLoaded',function(){
      [D,1,D,E,E,E,E,E,E,E,E,E,E,E,D,D],[B,5,5,5,E,D,D,D,D,E,D,D,D,E,D,B]],
     null);
 
-  // time page
-  G('g-time',
+  // tempo page
+  G('g-tempo',
     [[E,E,E,E,E,E,E,D,E,E,E,E,E,E,E,E],
      [D,D,D,D,D,D,B,D,D,D,D,D,D,D,D,D],
      [B,D,D,D,D,D,D,D,D,D,D,D,D,D,D,D],
@@ -204,7 +204,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <body>
 <div class="container">
 <h1>kria iii</h1>
-<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.4.0<br>based on ansible kria by monome</span></p>
+<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.4.1<br>based on ansible kria by monome</span></p>
 
 <!-- ─── NAVIGATION ───────────────────────────────────── -->
 <div class="ps" id="nav">
@@ -216,7 +216,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <li><span class="k">trigger page:</span> step 6, press again = <span class="k">ratchet sub-page</span></li> 
   <li><span class="k">note page:</span> step 7, press again = <span class="k">alt note sub-page</span></li>
   <li><span class="k">octave page:</span> step 8, press again = <span class="k">velocity sub-page</span></li>
-  <li><span class="k">duration page:</span> step 9</li>
+  <li><span class="k">note length page:</span> step 9</li>
   <li><span class="k">loop mod:</span> hold step 11</li>
   <li><span class="k">time division mod:</span> hold step 12</li>
   <li><span class="k">probability mod:</span> hold step 13</li>
@@ -225,7 +225,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <li><span class="k">mute track:</span> hold loop mod + press a track button. muted tracks are dimmed on all pages.</li>
   <li><span class="k">track copy:</span> hold source track button, press destination track - copies current page data (parameter pages).</li>
   <li><span class="k">track clear:</span> hold track button ~2s - resets current page data for that track.</li>
-  <li><span class="k">time / config / play / reset</span> are also available while holding loop, time division, or probability mods.</li>
+  <li><span class="k">tempo / config / play / reset</span> are also available while holding loop, time division, or probability mods.</li>
 </ul>
 </div>
 
@@ -268,11 +268,11 @@ window.addEventListener('DOMContentLoaded',function(){
 </ul>
 </div>
 
-<!-- ─── DURATION ──────────────────────────────────────── -->
-<div class="ps" id="dur">
-<h2>duration page</h2>
+<!-- ─── NOTE LENGTH ──────────────────────────────────────── -->
+<div class="ps" id="nlen">
+<h2>note length page</h2>
 <p class="pn">step 9</p>
-<div id="g-dur"></div>
+<div id="g-nlen"></div>
 <div class="gn"></div>
 <ul class="fl">
   <li><span class="k">row 1, steps 1-16:</span> global duration multiplier for the active track. step 1 = very short. step 9 = default (~1 step). step 16 = whole note.</li>
@@ -425,11 +425,11 @@ window.addEventListener('DOMContentLoaded',function(){
 </ul>
 </div>
 
-<!-- ─── TIME PAGE ─────────────────────────────────────── -->
-<div class="ps" id="time">
-<h2>time page</h2>
+<!-- ─── TEMPO PAGE ─────────────────────────────────────── -->
+<div class="ps" id="tempo">
+<h2>tempo page</h2>
 <p class="pn">hold step 6 - row 7</p>
-<div id="g-time"></div>
+<div id="g-tempo"></div>
 
 <p class="desc"><span class="k">- internal clock:</span></p>
 <ul class="fl">
@@ -454,7 +454,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="pn">hold step 7 - row 7</p>
 <div id="g-cfg"></div>
 <ul class="fl">
-  <li><span class="k">note sync (square icon):</span> on = pressing a step on the note, octave, duration, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.</li>
+  <li><span class="k">note sync (square icon):</span> on = pressing a step on the note, octave, note length, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.</li>
   <li><span class="k">loop sync - track (step 12, row 3):</span> sets loop brace on one track at a time.</li>
   <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a loop brace arms a pending snap instead of applying immediately. the snap fires when a running track completes a cycle whose loop is at least as long as the new loop — longer snaps wait for a bigger boundary. to set a multi-step snap: hold the first step and press the second. to set a 1-step snap: tap a single step (press and release). pending snap endpoints blink in the loop mod view. turning on loop snap disables loop sync all. default = off.</li>
   <li><span class="k">loop sync - all (steps 11-14, row 6):</span> all four tracks share loop points. turning on loop sync all disables loop snap. default = on.</li>
@@ -500,7 +500,7 @@ window.addEventListener('DOMContentLoaded',function(){
 </table>
 </div>
 
-<p class="footer"><span class="k">kria iii - v1.4.0</span></p>
+<p class="footer"><span class="k">kria iii - v1.4.1</span></p>
 </div>
 </body>
 </html>
