@@ -23,6 +23,14 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - internal tempo control (30-300bpm) and external MIDI clock input
 - configurable MIDI channel per track, MIDI clock output
 
+## what's new in v1.4.1
+
+* **track clear expanded** - holding a track button on the trigger page now resets all parameters (notes, octave, note length, velocity, probability, ratchet) in addition to triggers. a full clean slate in one gesture
+* **stability improvements** - removed dead code, cleaner render loop, reduced chance of occasional led flicker
+* **nav row muted indicator** - muted tracks now show as solid dim instead of blinking, consistent at any tempo
+* **trigger page playhead** - slightly improved contrast between active steps and the playhead
+* **manual** - duration page renamed to note length, time page renamed to tempo
+
 ## what's new in v1.4.0
 
 * **probability expanded to 5 rows** - 100%/ 75% / 50% / 25% / 0%. now deterministic: each level follows a fixed 4-loop cycle rather than random rolls, so patterns are predictable
@@ -47,4 +55,4 @@ upload `kria_iii.lua` via the iii web interface. https://dessertplanet.github.io
 
 ## version
 
-v1.4.0
+v1.4.1
