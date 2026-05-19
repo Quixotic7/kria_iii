@@ -215,6 +215,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="pn">row 8</p>
 <div id="g-nav"></div>
 <ul class="fl">
+<p><span class="k">navigation row 8:</span></p>
   <li><span class="k">steps 1-4:</span> select active track.</li>
   <li><span class="k">trigger page:</span> step 6, press again = <span class="k">ratchet sub-page</span></li> 
   <li><span class="k">note page:</span> step 7, press again = <span class="k">alt note sub-page</span></li>
@@ -227,8 +228,14 @@ window.addEventListener('DOMContentLoaded',function(){
   <li><span class="k">pattern page:</span> step 16. when transport is running, step 16 pulses to beat.</li>
   <li><span class="k">mute track:</span> hold loop mod + press a track button. muted tracks are dimmed on all pages.</li>
   <li><span class="k">track copy:</span> hold source track button, press destination track - copies current page data (parameter pages).</li>
-  <li><span class="k">track clear:</span> hold track button ~2s - resets current page data for that track.</li>
-  <li><span class="k">tempo / config / play / reset</span> are also available while holding loop, time division, or probability mods.</li>
+  <li><span class="k">track clear:</span> hold track button ~2s - resets current page data for that track. clearing track in trigger page resets all parameter pages at once for that track</li>
+<br>
+<p><span class="k">navigation row 7:</span></p>
+  <li><span class="k">tempo page:</span> hold step 6</li>
+  <li><span class="k">config page:</span> toggle step 7</li>
+<li><span class="k">play/stop:</span> press 15</li>
+<li><span class="k">reset:</span> press step 16</li>
+<p>tempo / config / play/stop / reset are also available while holding loop, time division, or probability mods.</p>
 </ul>
 </div>
 
@@ -241,6 +248,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <li><span class="k">rows 1-4, steps 1-16:</span> press to toggle triggers. </li>
   <li><span class="k">play/stop (row 7, step 15):</span> toggles transport. when external MIDI clock is connected, timing is driven by the external device - the button still starts/stops the sequencer but does not send MIDI clock messages.</li>
   <li><span class="k">reset (row 7, step 16):</span> all playheads to loop start. if running, immediately plays step 1.</li>
+ <li><span class="k">track clear:</span> hold track button ~2s - resets all parameter pages data for that track.</li>
 </ul>
 </div>
 
@@ -402,20 +410,20 @@ window.addEventListener('DOMContentLoaded',function(){
   <li><span class="k">note quantization:</span> toggle step 2 - pitch advances on trigger fires instead of clock steps.</li>
   <li><span class="k">direction:</span> steps 4-8 = forward · reverse · pingpong · random walk · random.</li>
 </ul>
-<br></br>
+<br>
 <p class="desc" style="margin-top:12px"><span class="k">- scale interval editor (rows 1-6, steps 9-16)</span></p>
 <ul class="fl">
   <li><span class="k">each row =</span> one scale interval (semitones between consecutive degrees). steps 9-16 = 0-7 semitones. bright = current value.</li>
   <li><span class="k">hold step 16 (row 7) + press interval:</span> stretch mode - adjusts interval and compensates adjacent to preserve range.</li>
   <li><span class="k">hold interval step + press another step in the same row:</span> adjust mode - shifts that degree's pitch without changing the preset.</li>
 </ul>
-<br></br>
+<br>
 <p class="desc" style="margin-top:12px"><span class="k">- root note (row 7, steps 9-15)</span></p>
 <ul class="fl">
   <li><span class="k">root C through B:</span> steps 9-15. press once to select a natural root. press the same step again to sharpen it (C#, D#, F#, G# or A# - E and B have no sharp). a sharp root blinks. press again to return to natural.</li>
   <li><span class="k">sharp shortcut:</span> hold step 16 + press any root key to toggle sharp on/off immediately - useful when changing root live without double-tapping.</li>
   <li>all notes across all tracks transpose to the new root immediately.</li>
-<br></br>
+<br>
 <p class="desc" style="margin-top:12px"><span class="k">- scale presets (rows 6-7, steps 1-8)</span></p>
 <ul class="fl">
   <li><span class="k">16 preset slots:</span> bright = active. press to switch. presets 1-8 = ionian/major, dorian, phrygian, lydian, mixolydian, aeolian/minor, locrian, chromatic. presets 9-16 = chromatic. can be used for user presets.</li>
