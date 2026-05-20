@@ -204,7 +204,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <body>
 <div class="container">
 <h1>kria iii</h1>
-<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.5.0</span><br>based on ansible kria by monome.
+<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.6.0</span><br>based on ansible kria by monome.
 <tr><td> consider this a kria lite version, with some expanded and added features</td></tr></p>
 
 
@@ -285,14 +285,14 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-nlen"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">row 1, steps 1-16:</span> global note length multiplier for the track - sets how long each note sustains relative to one step. at ×1 (step 9, default) a note ends just as the next step fires. below ×1 = staccato. above ×1 = notes sustain into following steps. step 16 at 100% per-step (row 2) = sustain. at other fractions, step 16 acts as ×16.</li>
+  <li><span class="k">row 1, steps 1-16:</span> global note length multiplier for the track - sets how long each note sustains relative to one step. lengths are relative to the track's actual step duration (bpm × time division) — at ×1 (step 9, default) a note fills exactly one step at the current division. below ×1 = staccato. above ×1 = notes sustain into following steps. at ×16 (step 16) with max division (32x) the note fills one 16-step loop.</li>
 </ul>
 <table class="dt">
 <tr><th><span class="k">step</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr>
-<tr><td><span class="k">length</span></td><td>×1/16</td><td>×1/8</td><td>×3/16</td><td>×1/4</td><td>×3/8</td><td>×1/2</td><td>×5/8</td><td>×3/4</td><td class="k">×1</td><td>×2</td><td>×3</td><td>×4</td><td>×6</td><td>×8</td><td>×12</td><td class="k">sustain</td></tr>
+<tr><td><span class="k">length</span></td><td>×1/16</td><td>×1/8</td><td>×3/16</td><td>×1/4</td><td>×3/8</td><td>×1/2</td><td>×5/8</td><td>×3/4</td><td class="k">×1</td><td>×2</td><td>×4</td><td>×8</td><td>×10</td><td>×12</td><td>×14</td><td class="k">×16</td></tr>
 </table>
 <ul class="fl">
-  <li><span class="k">rows 2-7:</span> per-step note length - scales each step individually as a fraction of the global setting. row 2 = 100% (full global length, default). row 7 = 10% (very short). when the global multiplier is at step 16, row 2 = sustain: note holds until the next trigger fires or transport stops.</li>
+  <li><span class="k">rows 2-7:</span> per-step note length - scales each step individually as a fraction of the global setting. row 2 = 100% (full global length, default). row 7 = 10% (very short).</li>
 </ul>
 <table class="dt">
 <tr><th><span class="k">row</span></th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
@@ -545,7 +545,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <br>
 
 
-<p class="footer"><span class="k">kria iii - v1.5.0</span></p>
+<p class="footer"><span class="k">kria iii - v1.6.0</span></p>
 </div>
 </body>
 </html>

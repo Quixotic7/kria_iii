@@ -1,4 +1,4 @@
--- kria iii v1.5.0
+-- kria iii v1.6.0
 collectgarbage("collect")
 STEPS=16
 tro=6 tfi=0 cpd=0.125
@@ -14,7 +14,7 @@ ODR=5
 OR={[2]=36,[3]=24,[4]=12,[5]=0,[6]=-12,[7]=-24}
 GO={-24,-12,0,12,24,36,48,60}
 NP=16
-DM={16,12,8,6,4,3,2,1,.75,.625,.5,.375,.25,.187,.125,.0625}
+DM={16,14,12,10,8,4,2,1,.75,.625,.5,.375,.25,.187,.125,.0625}
 VL={20,40,60,80,95,112,127}
 PP={{false,false,false,false},{true,false,false,false},{true,false,true,false},{true,true,true,false},{true,true,true,true}}
 WK={0,2,4,5,7,9,11}
@@ -36,10 +36,9 @@ else rsl[t][s] = rsl[t][s] & ~(1 << (i-1)) end
 end
 function ucpd() local b=tro<7 and 30+tro*15 or 120+(tro-6)*20 cpd=15/(b+tfi) if tr2 and not ms then icl.time=cpd end end
 function nls(t,s)
-if gdu[t]==16 and (du[t][s] or 0)==5 then return 9999 end
-local st=cpd local r=du[t][s] or 0 local m=DM[17-gdu[t]] or 1
+local r=du[t][s] or 0 local m=DM[17-gdu[t]] or 1
 local frac=r==0 and 0.1 or r/5
-return mx(st*frac*m,.02)
+return mx(cpd*(DV[dv2[t]] or 1)*frac*m,.02)
 end
 function aliw(t) return als[t]>ale[t] end
 function ainl(t,s)
@@ -102,12 +101,10 @@ if mute[t] then return end
 local mn=mnf(t,s)
 local prev=an[t] nom[t]:stop()
 if not tie and prev>=0 then midi_note_off(prev,0,TCH[t]) end
-sus[t]=(gdu[t]==16 and (du[t][s] or 0)==5)
 midi_note_on(mn,VL[ve[t][s] or 6],TCH[t]) an[t]=mn nom[t]:start(nls(t,s))
 if tie and prev>=0 and prev~=mn then midi_note_off(prev,0,TCH[t]) end
 end
 function sof(t)
-sus[t]=false
 if an[t]>=0 then midi_note_off(an[t],0,TCH[t]) an[t]=-1 nom[t]:stop() end
 end
 function ano() for t=1,4 do ram[t]:stop() rsc[t]=0 sof(t) end end
@@ -147,7 +144,7 @@ if PP[prb[t][ph[t]] or 5][lc[t]+1] then
 local nd=rdv[t][ph[t]] or 1
 local ns=tclk[t] and nph[t] or ph[t]
 if nd<=1 then
-if rget(t,ph[t],1) then son(t,ns) if tclk[t] and not pld then advnph(t) end else if not sus[t] then sof(t) end end
+if rget(t,ph[t],1) then son(t,ns) if tclk[t] and not pld then advnph(t) end end
 else
 sof(t) rsc[t]=0
 local ri=mx(cpd/nd,.02)
@@ -155,8 +152,8 @@ rsc[t]=1
 if rget(t,ph[t],1) then son(t,ns) if tclk[t] and not pld then advnph(t) end end
 if nd>1 then ram[t]:start(ri) end
 end
-else if not sus[t] then sof(t) end end
-else if not sus[t] then sof(t) end end
+end
+end
 return true
 end
 function tka()
@@ -1076,7 +1073,6 @@ ap=1 pats={} psx={}
 vm=1 at=1
 nsyn=true lsyn=2 tie=false
 mlh=false mth=false mph=false cfh=false tmh=false lfc=nil lft=nil alpflash=false
-sus={false,false,false,false}
 tr={} no={} oc={} du={} ph={} ls={} le={} dv2={} dc={} an={}
 go2={3,3,3,3} gdu={9,9,9,9} sdir={1,1,1,1} ddr={1,1,1,1}
 mute={false,false,false,false}
@@ -1103,7 +1099,6 @@ nom={}
 for t=1,4 do
 local tc=t
 nom[t]=metro.init(function()
-sus[tc]=false
 if an[tc]>=0 then midi_note_off(an[tc],0,TCH[tc]) an[tc]=-1 end
 nom[tc]:stop()
 end,0.1,1)

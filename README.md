@@ -24,6 +24,11 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - configurable MIDI channel per track, MIDI clock output
 - consider this a kria lite version. missing features are glide page, meta-patterns, per-parameter clock divisions, division cueing, division sync modes
 
+## what's new in v1.6.0
+
+* **note length division scaling** — note lengths now scale with the track's time division. ×1 (step 9) fills exactly one step at the current division. ×16 (step 16) with max division (32x) fills one full 16-step loop. the upper multiplier range is redesigned: steps 9–16 run ×1, ×2, ×4, ×8, ×10, ×12, ×14, ×16
+* **sustain mode removed** — step 16 in the note length row is now ×16, the longest timed note length. sustain mode has been replaced by the division-scaled ceiling
+
 ## what's new in v1.5.0
 
 * **note tie** - config toggle (step 9, row 8). when on, sends note-on before note-off on consecutive steps, triggering legato on connected instruments
@@ -65,4 +70,4 @@ upload `kria_iii.lua` via the iii web interface. https://dessertplanet.github.io
 
 ## version
 
-v1.5.0
+v1.6.0

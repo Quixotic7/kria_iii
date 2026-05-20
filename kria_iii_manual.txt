@@ -1,5 +1,5 @@
 kria iii
-monome grid one - 4-track midi step sequencer - v1.5.0
+monome grid one - 4-track midi step sequencer - v1.6.0
 based on ansible kria by monome. consider this a kria lite version, with some expanded and added features
 
 ════════════════════════════════════════════════════════════════
@@ -66,17 +66,15 @@ NOTE LENGTH PAGE
 step 9
 
 › row 1, steps 1-16: global note length multiplier for the track - sets how long each note
-  sustains relative to one step. at ×1 (step 9, default) a note ends just as the next step
-  fires. below ×1 = staccato. above ×1 = notes sustain into following steps.
-  step 16 at 100% per-step (row 2) = sustain. at other fractions, step 16 acts as ×16.
+  sustains relative to one step. lengths are relative to the track's actual step duration
+  (bpm × time division) — at ×1 (step 9, default) a note fills exactly one step at the
+  current division. at ×16 (step 16) with max division (32x) the note fills one 16-step loop.
 
-  step    1     2     3      4     5     6     7     8     9   10  11  12  13  14  15   16
-  length  ×1/16 ×1/8  ×3/16  ×1/4  ×3/8  ×1/2  ×5/8  ×3/4  ×1  ×2  ×3  ×4  ×6  ×8  ×12  sustain
+  step    1     2     3      4     5     6     7     8     9   10  11  12  13   14   15   16
+  length  ×1/16 ×1/8  ×3/16  ×1/4  ×3/8  ×1/2  ×5/8  ×3/4  ×1  ×2  ×4  ×8  ×10  ×12  ×14  ×16
 
 › rows 2-7: per-step note length - scales each step individually as a fraction of the global
   setting. row 2 = 100% (full global length, default). row 7 = 10% (very short).
-  when the global multiplier is at step 16, row 2 = sustain: note holds until the next
-  trigger fires or transport stops.
 
   row      2     3    4    5    6    7
   fraction 100%  80%  60%  40%  20%  10%
@@ -285,4 +283,4 @@ MISSING FROM ANSIBLE KRIA
 
 
 
-kria iii - v1.5.0
+kria iii - v1.6.0
