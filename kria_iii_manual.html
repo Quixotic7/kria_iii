@@ -207,7 +207,6 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.5.0</span><br>based on ansible kria by monome.
 <tr><td> consider this a kria lite version, with some expanded and added features</td></tr></p>
 
-<br>
 
 <!-- ─── NAVIGATION ───────────────────────────────────── -->
 <div class="ps" id="nav">
@@ -231,11 +230,11 @@ window.addEventListener('DOMContentLoaded',function(){
   <li><span class="k">track clear:</span> hold track button ~2s - resets current page data for that track. clearing track in trigger page resets all parameter pages at once for that track</li>
 <br>
 <p><span class="k">navigation row 7:</span></p>
-  <li><span class="k">tempo page:</span> hold step 6</li>
+  <li><span class="k">tempo page:</span> toggle step 6, button blinks when open</li>
   <li><span class="k">config page:</span> toggle step 7</li>
 <li><span class="k">play/stop:</span> press 15</li>
 <li><span class="k">reset:</span> press step 16</li>
-<p>tempo / config / play/stop / reset are also available while holding loop, time division, or probability mods.</p>
+<p>tempo and config pages, play/stop, and reset are also accessible while holding loop, time division, or probability mods — tap step 6 or 7 to open, tap again to close.</p>
 </ul>
 </div>
 
@@ -286,27 +285,20 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-nlen"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">row 1, steps 1-16:</span> global note length multiplier for the track - sets how long each note sustains relative to one step. at ×1 (step 9, default) a note ends just as the next step fires. below ×1 = staccato. above ×1 = notes sustain into following steps.</li>
+  <li><span class="k">row 1, steps 1-16:</span> global note length multiplier for the track - sets how long each note sustains relative to one step. at ×1 (step 9, default) a note ends just as the next step fires. below ×1 = staccato. above ×1 = notes sustain into following steps. step 16 at 100% per-step (row 2) = sustain. at other fractions, step 16 acts as ×16.</li>
 </ul>
 <table class="dt">
 <tr><th><span class="k">step</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr>
-<tr><td><span class="k">length</span></td><td>×1/16</td><td>×1/8</td><td>×3/16</td><td>×1/4</td><td>×3/8</td><td>×1/2</td><td>×5/8</td><td>×3/4</td><td class="k">×1</td><td>×2</td><td>×3</td><td>×4</td><td>×6</td><td>×8</td><td>×12</td><td>×16</td></tr>
+<tr><td><span class="k">length</span></td><td>×1/16</td><td>×1/8</td><td>×3/16</td><td>×1/4</td><td>×3/8</td><td>×1/2</td><td>×5/8</td><td>×3/4</td><td class="k">×1</td><td>×2</td><td>×3</td><td>×4</td><td>×6</td><td>×8</td><td>×12</td><td class="k">sustain</td></tr>
 </table>
 <ul class="fl">
-  <li><span class="k">rows 2-7:</span> per-step note length - scales each step individually as a fraction of the global setting. row 7 = 100% (full global length). row 2 = 10% (very short). steps without a value set default to 10%.</li>
+  <li><span class="k">rows 2-7:</span> per-step note length - scales each step individually as a fraction of the global setting. row 2 = 100% (full global length, default). row 7 = 10% (very short). when the global multiplier is at step 16, row 2 = sustain: note holds until the next trigger fires or transport stops.</li>
 </ul>
 <table class="dt">
 <tr><th><span class="k">row</span></th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
-<tr><td><span class="k">fraction</span></td><td>10%</td><td>20%</td><td>40%</td><td>60%</td><td>80%</td><td class="k">100%</td></tr>
+<tr><td><span class="k">fraction</span></td><td class="k">100%</td><td>80%</td><td>60%</td><td>40%</td><td>20%</td><td>10%</td></tr>
 </table>
 </div>
-<p><span class="k">finding the right adsr settings on your synth can be a bit tricky so here is a starting point.</span></p> 
-<p>attack: very short (1-5ms)</p>
-<p>decay: short to medium (50-200ms)</p>
-<p>sustain: 0 or low (this is usually not where i end up, but good for a starting point after setting decay and release first. then add sustain till you are happy</p>
-<p>release: short (50-100ms)   </p>
-<br>
-<br>
 
 
 <!-- ─── VELOCITY ──────────────────────────────────────── -->
@@ -356,7 +348,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="gn"></div>
 <ul class="fl">
   <li><span class="k">setting a loop:</span> first press = loop start, second press = loop end. loops can wrap around step 16 to step 3 for example.</li>
-  <li>on <span class="k">note or alt note page:</span> shows and edits the alt-note loop. all other pages: shows the trigger loop.</li>
+  <li>on <span class="k">alt note page:</span> shows and edits the alt-note loop. all other pages (including note page): shows the trigger loop.</li>
   <li>on <span class="k">alt note page</span> with loop sync and note sync both off: stays on the alt note page - press any two steps across rows 1-7 to set the alt note loop brace in place. a brief flash confirms the new brace.</li>
   <li>any track's loop can be edited, not just the active track.</li>
   <li><span class="k">mute:</span> while holding loop mod, press a track button to toggle mute.</li>
@@ -459,7 +451,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ─── TEMPO PAGE ─────────────────────────────────────── -->
 <div class="ps" id="tempo">
 <h2>tempo page</h2>
-<p class="pn">hold step 6 - row 7</p>
+<p class="pn">step 6 - row 7 — press to open, press again to close. button blinks when open.</p>
 <div id="g-tempo"></div>
 
 <p class="desc"><span class="k">- internal clock:</span></p>

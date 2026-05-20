@@ -20,7 +20,13 @@ row 8
 › mute: hold loop mod + press a track button. muted tracks are dimmed on all pages.
 › track copy: hold source track button, press destination track - copies current page data (parameter pages).
 › track clear: hold track button ~2s - resets current page data for that track.
-› tempo / config / play / reset are also available while holding loop, time division, or probability mods.
+
+row 7
+› tempo page: toggle step 6 — button blinks when open.
+  config page: toggle step 7 — button blinks when open.
+  play/stop: press step 15.
+  reset: press step 16.
+› tempo and config pages, play/stop, and reset are also accessible while holding loop, time division, or probability mods — tap step 6 or 7 to open, tap again to close.
 
 ════════════════════════════════════════════════════════════════
 
@@ -62,24 +68,18 @@ step 9
 › row 1, steps 1-16: global note length multiplier for the track - sets how long each note
   sustains relative to one step. at ×1 (step 9, default) a note ends just as the next step
   fires. below ×1 = staccato. above ×1 = notes sustain into following steps.
+  step 16 at 100% per-step (row 2) = sustain. at other fractions, step 16 acts as ×16.
 
   step    1     2     3      4     5     6     7     8     9   10  11  12  13  14  15   16
-  length  ×1/16 ×1/8  ×3/16  ×1/4  ×3/8  ×1/2  ×5/8  ×3/4  ×1  ×2  ×3  ×4  ×6  ×8  ×12  ×16
+  length  ×1/16 ×1/8  ×3/16  ×1/4  ×3/8  ×1/2  ×5/8  ×3/4  ×1  ×2  ×3  ×4  ×6  ×8  ×12  sustain
 
 › rows 2-7: per-step note length - scales each step individually as a fraction of the global
-  setting. row 7 = 100% (full global length). row 2 = 10% (very short). steps without a
-  value set default to 10%.
+  setting. row 2 = 100% (full global length, default). row 7 = 10% (very short).
+  when the global multiplier is at step 16, row 2 = sustain: note holds until the next
+  trigger fires or transport stops.
 
-  row      2    3    4    5    6    7
-  fraction 10%  20%  40%  60%  80%  100%
-
-
-finding the right adsr settings on your synth can be a bit tricky so here is a starting point.
-
-- attack: very short (1-5ms)
-- decay: short to medium (50-200ms)
-- sustain: 0 or low (this is usually not where i end up, but good for a starting point after setting decay and release first. then add sustain till you are happy
-- release: short (50-100ms)
+  row      2     3    4    5    6    7
+  fraction 100%  80%  60%  40%  20%  10%
 
 ════════════════════════════════════════════════════════════════
 
@@ -122,7 +122,7 @@ step 11, hold
 
 › setting a loop: first press = loop start, second press = loop end.
   loops can wrap around step 16 to step 3 for example.
-› on note or alt note page: shows and edits the alt-note loop. all other pages: shows the trigger loop.
+› on alt note page: shows and edits the alt-note loop. all other pages (including note page): shows the trigger loop.
 › on alt note page with loop sync and note sync both off: stays on the alt note page -
   press any two steps across rows 1-7 to set the alt note loop brace in place.
   a brief flash confirms the new brace.
@@ -203,7 +203,7 @@ step 16
 ════════════════════════════════════════════════════════════════
 
 TEMPO PAGE
-hold step 6, row 7
+step 6, row 7 — press to open, press again to close. button blinks when open.
 
 - internal clock:
 › rough bpm: row 2, steps 1-7 = 30-120 bpm in 15 bpm steps · steps 8-16 = 140-300 bpm in 20 bpm steps. step 7 = default (120 bpm).
