@@ -285,7 +285,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-nlen"></div>
 <div class="gn"></div>
 <ul class="fl">
-  <li><span class="k">row 1, steps 1-16:</span> global note length multiplier for the track - sets how long each note sustains relative to one step. lengths are relative to the track's actual step duration (bpm × time division) — at ×1 (step 9, default) a note fills exactly one step at the current division. below ×1 = staccato. above ×1 = notes sustain into following steps. at ×16 (step 16) with max division (32x) the note fills one 16-step loop.</li>
+  <li><span class="k">row 1, steps 1-16:</span> note length is measured in track steps. step 9 = one step (×1, default) - the note ends as the next step fires. steps 1-8 = fractions of one step. steps 10-16 = 2, 4, 8, 10, 12, 14, 16 steps. tempo and time division affect how long a step is in real time, but the multiplier always means that many steps. for a 16-step loop: ×16 = one full pass, ×8 = half, ×4 = quarter. for a shorter loop like the default 6-step, ×6 would be one pass, ×16 would be nearly three passes.</li>
 </ul>
 <table class="dt">
 <tr><th><span class="k">step</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th></tr>
@@ -451,7 +451,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ─── TEMPO PAGE ─────────────────────────────────────── -->
 <div class="ps" id="tempo">
 <h2>tempo page</h2>
-<p class="pn">step 6 - row 7 — press to open, press again to close. button blinks when open.</p>
+<p class="pn">step 6 - row 7</p>
 <div id="g-tempo"></div>
 
 <p class="desc"><span class="k">- internal clock:</span></p>
@@ -474,7 +474,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <!-- ─── CONFIG PAGE ───────────────────────────────────── -->
 <div class="ps" id="cfg">
 <h2>config page</h2>
-<p class="pn">step 7 - row 7 — press to open, press again to close. button blinks when open.</p>
+<p class="pn">step 7 - row 7</p>
 <div id="g-cfg"></div>
 <ul class="fl">
   <li><span class="k">note sync (square icon):</span> on = pressing a step on the note, octave, note length, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.</li>

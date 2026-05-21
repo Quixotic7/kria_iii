@@ -65,10 +65,12 @@ row 1 global offset:
 NOTE LENGTH PAGE
 step 9
 
-› row 1, steps 1-16: global note length multiplier for the track - sets how long each note
-  sustains relative to one step. lengths are relative to the track's actual step duration
-  (bpm × time division) — at ×1 (step 9, default) a note fills exactly one step at the
-  current division. at ×16 (step 16) with max division (32x) the note fills one 16-step loop.
+› row 1, steps 1-16: note length is measured in track steps. step 9 = one step (×1, default)
+  - the note ends as the next step fires. steps 1-8 = fractions of one step. steps 10-16 =
+  2, 4, 8, 10, 12, 14, 16 steps. tempo and time division affect how long a step is in real
+  time, but the multiplier always means that many steps. for a 16-step loop: ×16 = one full
+  pass, ×8 = half, ×4 = quarter. for a shorter loop like the default 6-step, ×6 would be
+  one pass, ×16 would be nearly three passes.
 
   step    1     2     3      4     5     6     7     8     9   10  11  12  13   14   15   16
   length  ×1/16 ×1/8  ×3/16  ×1/4  ×3/8  ×1/2  ×5/8  ×3/4  ×1  ×2  ×4  ×8  ×10  ×12  ×14  ×16
@@ -201,7 +203,7 @@ step 16
 ════════════════════════════════════════════════════════════════
 
 TEMPO PAGE
-step 6, row 7 — press to open, press again to close. button blinks when open.
+step 6, row 7
 
 - internal clock:
 › rough bpm: row 2, steps 1-7 = 30-120 bpm in 15 bpm steps · steps 8-16 = 140-300 bpm in 20 bpm steps. step 7 = default (120 bpm).
@@ -217,7 +219,7 @@ step 6, row 7 — press to open, press again to close. button blinks when open.
 ════════════════════════════════════════════════════════════════
 
 CONFIG PAGE
-step 7, row 7 - press to open, press again to close. button blinks when open.
+step 7, row 7 
 
 › note sync (square icon): on = pressing a step on the note, octave, note length, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.
 

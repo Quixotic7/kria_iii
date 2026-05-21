@@ -26,8 +26,8 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 
 ## what's new in v1.6.0
 
-* **note length division scaling** — note lengths now scale with the track's time division. ×1 (step 9) fills exactly one step at the current division. ×16 (step 16) with max division (32x) fills one full 16-step loop. the upper multiplier range is redesigned: steps 9–16 run ×1, ×2, ×4, ×8, ×10, ×12, ×14, ×16
-* **sustain mode removed** — step 16 in the note length row is now ×16, the longest timed note length. sustain mode has been replaced by the division-scaled ceiling
+* **note length redesign** - note length is measured in track steps. step 9  = one step (×1 default) - the note ends as the next step fires. steps 1-8 = fractions of one step. steps 10-16 = 2, 4, 8, 10, 12, 14, 16 steps. tempo and time division affect how long a step is in real time, but the multiplier always means that many steps. for a 16-step loop: ×16 = one full pass, ×8 = half, ×4 = quarter. for a shorter loop like the default 6-step, ×6 would be one pass, ×16 would be nearly three passes.
+* **sustain mode removed** - replaced by ×16 as the natural top of the range
 
 ## what's new in v1.5.0
 
