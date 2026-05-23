@@ -1,4 +1,4 @@
--- kria iii v1.6.0
+-- kria iii v1.6.1
 collectgarbage("collect")
 STEPS=16
 tro=6 tfi=0 cpd=0.125
@@ -34,7 +34,7 @@ function rset(t,s,i,v)
 if v then rsl[t][s] = rsl[t][s] | (1 << (i-1))
 else rsl[t][s] = rsl[t][s] & ~(1 << (i-1)) end
 end
-function ucpd() local b=tro<7 and 30+tro*15 or 120+(tro-6)*20 cpd=15/(b+tfi) if tr2 and not ms then icl.time=cpd end end
+function ucpd() local b=tro<7 and 30+tro*15 or 120+(tro-6)*20 cpd=15/(b+tfi) if tr2 and not ms then icl.time=cpd/sp end end
 function nls(t,s)
 local r=du[t][s] or 0 local m=DM[17-gdu[t]] or 1
 local frac=r==0 and 0.1 or r/5
@@ -158,9 +158,9 @@ return true
 end
 function tka()
 if not tr2 then return end
+if not ms then midi_out(MC8) cp=cp+1 if cp<sp then return end cp=0 end
 cpls=not cpls
 cbt=(cbt+1)%4
-if not ms then midi_out(MC8) end
 gcc=gcc+1
 if gcc>=64 then gcc=0 cg("step",1) end
 local upd=cbt==0
@@ -193,13 +193,14 @@ if upd then rd() end
 end
 function event_midi(b1,b2,b3)
 if b1==0xF8 then
-if not tr2 then return end
+if not tr2 or not ms then return end
 local now=get_time() table.insert(pt,now)
 if #pt>PB then table.remove(pt,1) end
 if not ms then ms=true icl:stop() cp=0 for t=1,4 do dc[t]=0 adc[t]=0 end end
 if #pt>=2 then cpd=((pt[#pt]-pt[1])/(#pt-1))*sp end
 cp=cp+1 if cp>=sp then cp=0 tka() end
 elseif b1==0xFA or b1==0xFB then
+if tr2 and not ms then return end
 ms=true tr2=true icl:stop() idl:stop() cp=0 pt={} cbt=0 cpls=false ccc=0
 for t=1,4 do lc[t]=0 end
 for t=1,4 do
@@ -207,7 +208,7 @@ ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=0 aph[t]=(sdir[t]==2 and ale[t] or a
 if tr[t][ph[t]] then son(t,ph[t]) else sof(t) end
 end
 rd()
-elseif b1==0xFC then tr2=false ms=false pt={} ucpd() ano() idl:start()
+elseif b1==0xFC then if not ms then return end tr2=false ms=false pt={} ucpd() ano() idl:start()
 for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) aph[t]=(sdir[t]==2 and ale[t] or als[t]) nph[t]=ls[t] lc[t]=0 end
 rd()
 end
@@ -662,7 +663,7 @@ for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) aph[t]=(sdir[t]==2 and ale[t]
 else tr2=true cbt=0 cpls=false ccc=0
 for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=DV[dv2[t] or 1]-1 aph[t]=(sdir[t]==2 and ale[t] or als[t]) adc[t]=0 nph[t]=ls[t] lc[t]=0 end
 pld=true idl:stop()
-if not ms then ucpd() icl:stop() icl:start(cpd) midi_out(MCA) end
+if not ms then ucpd() icl:stop() cp=0 icl:start(cpd/sp) midi_out(MCA) end
 end
 rd()
 end
@@ -671,7 +672,7 @@ ccc=0
 for t=1,4 do ph[t]=(sdir[t]==2 and le[t] or ls[t]) dc[t]=0 aph[t]=(sdir[t]==2 and ale[t] or als[t]) adc[t]=0 nph[t]=ls[t] lc[t]=0 end
 if tr2 then
 for t=1,4 do if not mute[t] and tr[t][ph[t]] then son(t,ph[t]) end end
-cp=0 if not ms then icl:stop() icl:start(cpd) end
+cp=0 if not ms then icl:stop() icl:start(cpd/sp) end
 end
 rd()
 end

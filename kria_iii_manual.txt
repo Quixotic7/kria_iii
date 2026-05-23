@@ -1,5 +1,5 @@
 kria iii
-monome grid one - 4-track midi step sequencer - v1.6.0
+monome grid one - 4-track midi step sequencer - v1.6.1
 based on ansible kria by monome. consider this a kria lite version, with some expanded and added features
 
 ════════════════════════════════════════════════════════════════
@@ -285,4 +285,4 @@ MISSING FROM ANSIBLE KRIA
 
 
 
-kria iii - v1.6.0
+kria iii - v1.6.1

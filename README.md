@@ -24,6 +24,10 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - configurable MIDI channel per track, MIDI clock output
 - consider this a kria lite version. missing features are glide page, meta-patterns, per-parameter clock divisions, division cueing, division sync modes
 
+## what's new in v1.6.1
+
+* **midi clock output fix** - kria iii now sends correct midi clock (24ppqn). previously sent 1 pulse per step (4ppqn), causing connected devices to display 1/6 the intended tempo. also fixes transport start/stop not working when connected via usb due to midi loopback
+
 ## what's new in v1.6.0
 
 * **note length redesign** - note length is measured in track steps. step 9  = one step (×1 default) - the note ends as the next step fires. steps 1-8 = fractions of one step. steps 10-16 = 2, 4, 8, 10, 12, 14, 16 steps. tempo and time division affect how long a step is in real time, but the multiplier always means that many steps. for a 16-step loop: ×16 = one full pass, ×8 = half, ×4 = quarter. for a shorter loop like the default 6-step, ×6 would be one pass, ×16 would be nearly three passes.
@@ -70,4 +74,4 @@ upload `kria_iii.lua` via the iii web interface. https://dessertplanet.github.io
 
 ## version
 
-v1.6.0
+v1.6.1
