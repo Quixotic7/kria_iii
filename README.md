@@ -7,15 +7,15 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 ## files
 
 - **kria_iii.lua** 
-- **kria_iii_manual.html** — open in a browser for the full manual
+- **kria_iii_manual.html** - open in a browser for the full manual
    https://aktsom.github.io/kria_iii/kria_iii_manual.html
 
 
 ## features
 
 - 4 tracks, 16 steps, parameter pages: trigger, note, octave, duration, ratchet, alt note, velocity.
-- trigger ratcheting — up to 5 individually toggled sub-triggers per step
-- alternate note — second note sequence with its own loop and clock division
+- trigger ratcheting - up to 5 individually toggled sub-triggers per step
+- alternate note - second note sequence with its own loop and clock division
 - per-track loop with wrap-around, 5 direction modes, clock division
 - per-step probability and note quantization mode
 - 16 scale presets with editable intervals, live adjust
