@@ -24,6 +24,10 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - configurable MIDI channel per track, MIDI clock output
 - consider this a kria lite version. missing features are glide page, meta-patterns, per-parameter clock divisions, division cueing, division sync modes
 
+## what's new in v1.6.2
+
+* **track clear expanded** - trigger page clear now also resets loop (to default 6-step), time division, direction, and note quantize for the track. playhead is reset to step 1, any playing note is silenced
+
 ## what's new in v1.6.1
 
 * **midi clock output fix** - kria iii now sends correct midi clock (24ppqn). previously sent 1 pulse per step (4ppqn), causing connected devices to display 1/6 the intended tempo. also fixes transport start/stop not working when connected via usb due to midi loopback
@@ -74,4 +78,4 @@ upload `kria_iii.lua` via the iii web interface. https://dessertplanet.github.io
 
 ## version
 
-v1.6.1
+v1.6.2

@@ -1,4 +1,4 @@
--- kria iii v1.6.1
+-- kria iii v1.6.2
 collectgarbage("collect")
 STEPS=16
 tro=6 tfi=0 cpd=0.125
@@ -1143,6 +1143,10 @@ local t=clrt
 if vm==1 or vm==11 then
 for s=1,STEPS do tr[t][s]=false no[t][s]=1 oc[t][s]=ODR du[t][s]=5 prb[t][s]=5 rdv[t][s]=1 rsl[t][s]=1 an2[t][s]=0 ve[t][s]=6 end
 go2[t]=3 gdu[t]=9
+ls[t]=1 le[t]=6 als[t]=1 ale[t]=6
+dv2[t]=1 adv2[t]=1 sdir[t]=1 tclk[t]=false
+sof(t) ram[t]:stop() rsc[t]=0
+ph[t]=1 aph[t]=1 nph[t]=1 dc[t]=0 adc[t]=0 lc[t]=0 addr[t]=1
 elseif vm==2 or vm==12 then
 for s=1,STEPS do no[t][s]=1 tr[t][s]=false end
 elseif vm==3 then
