@@ -72,6 +72,8 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 upload `kria_iii.lua` via the iii web interface. https://dessertplanet.github.io/web-diii/
  See `kria_iii_manual.html` for full documentation.
 
+llm disclosure 
+
 ## version
 
 v1.6.2
