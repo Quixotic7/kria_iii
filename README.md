@@ -6,8 +6,7 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 
 ## files
 
-- **kria_iii.lua** - sequencer core
-- **kria_iii_gfx.lua** - display code, loaded by kria_iii.lua (both files are required)
+- **kria_iii.lua** 
 - **kria_iii_manual.html** - open in a browser for the full manual
    https://aktsom.github.io/kria_iii/kria_iii_manual.html
 
@@ -25,9 +24,9 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 - configurable MIDI channel per track, MIDI clock output
 - consider this a kria lite version. missing features are glide page, meta-patterns, per-parameter clock divisions, division cueing, division sync modes
 
-## what's new in v1.7.0
+## what's new in v1.6.3
 
-* **memory usage reduced** - fixes out-of-memory errors some users hit when uploading or while running. the script is now split into two files: `kria_iii.lua` and `kria_iii_gfx.lua` - **upload both**. splitting lowers the compile-time memory spike that caused upload failures. constant tables are packed into byte strings and the pattern-save path allocates far less, reducing runtime memory pressure
+* **memory usage reduced** - addresses out-of-memory errors some users hit when uploading or while running. all per-step sequence data is now bit-packed into a single flat integer array (replacing 40 lua tables), constant tables are packed into byte strings or computed on the fly, duplicated code paths are consolidated, the pattern-save path allocates far less, and garbage collection runs at the load-time choke points. saved patterns are fully compatible. if an upload still fails with `-- out of memory!`, power-cycle the device and upload again with a fresh boot
 
 ## what's new in v1.6.1
 
@@ -74,11 +73,11 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 
 ## usage
 
-upload both `kria_iii.lua` and `kria_iii_gfx.lua` via the iii web interface. https://dessertplanet.github.io/web-diii/
+upload `kria_iii.lua` via the iii web interface. https://dessertplanet.github.io/web-diii/
  See `kria_iii_manual.html` for full documentation.
 
 llm disclosure 
 
 ## version
 
-v1.7.0
+v1.6.3
